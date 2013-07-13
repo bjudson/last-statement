@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div id="wrapper" class="wrapper home-wrap">
+        <h1 class="main-h1 home-h1">The last statement of {{ offender.first_name }} {{ offender.last_name }}</h1>
+        <p class="intro">
+            On {{ exec_date }}, {{ offender.first_name }} {{ offender.last_name }} gave a last statement before his execution by the State of Texas.
+        </p>
+
+        <div class="statement">
+            {% autoescape false %}
+                {{ offender.last_statement }}
+            {% endautoescape %}
+        </div>
+
+        <a id="info-btn" class="info-btn home-info-btn" href="#">?</a>
+
+        <div id="more-info" class="more-info">
+            <p>
+                This site displays the last statements of people executed by the State of Texas. On <a href="{{ url_for('index') }}">the front page</a>, if possible, the statement shown was made by a person whose execution anniversary is today (or, if not, the nearest applicable day).
+            </p>
+            <p>
+                Since the death penalty was reinstated in 1974, Texas has executed {{ exec_total }} people.
+            </p>
+            <p>
+                The data was scraped from <a href="http://www.tdcj.state.tx.us/death_row/dr_executed_offenders.html" title="Executed Offenders">this page</a> operated by the Texas Department of Criminal Justice.
+            </p>
+        </div>
+    </div>
+{% endblock %}

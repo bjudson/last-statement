@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div id="wrapper" class="wrapper home-wrap">
+        <h1 class="main-h1">All last statements</h1>
+        {% for offender in offenders %}
+        <h2 class="main-h2 all-h2">{{ offender.execution_num }}. {{ offender.first_name }} {{ offender.last_name }}<a class="icon permalink" href="{{ url_for('execution_num', num=offender.execution_num) }}" title="Permalink">→</a></h2>
+
+        <p class="meta">
+            <span>Executed {{ offender.execution_date.strftime('%-d %B %Y') }}</span> <span>{{ offender.age }} years old</span> <span>{{ offender.race }}
+        </p>
+
+        <div class="statement">
+            {% autoescape false %}
+                {{ offender.last_statement }}
+            {% endautoescape %}
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

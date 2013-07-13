@@ -1,0 +1,10 @@
+.DS_Store
+*.pyc
+
+/apache2
+/data/*
+/htdocs/index.py
+/htdocs/settings/dev.py
+/htdocs/settings/prod.py
+/htdocs/settings/stage.py
+/htdocs/static/info_img/*

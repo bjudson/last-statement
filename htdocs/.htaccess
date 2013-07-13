@@ -1,0 +1,5 @@
+<IfModule mod_rewrite.c>
+   RewriteEngine on
+   RewriteCond %{http_host} ^www.laststatement.org [NC]
+   RewriteRule ^(.*)$ http://laststatement.org/ [R=301,NC,L]
+</IfModule>
