@@ -129,7 +129,7 @@ def all():
 
 @app.route('/all/text', methods=['GET', 'OPTIONS'])
 def save_text():
-    """ Save all statements to a single file, without HTML tags.
+    """ Save all statements to a single file, without names or HTML tags.
     """
 
     statements = db.session.query(Offender.last_statement).\
