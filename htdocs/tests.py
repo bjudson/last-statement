@@ -39,5 +39,34 @@ class LastStatementTestCase(unittest.TestCase):
 
             assert int(doy) == doy2
 
+    #
+    # Test public routes
+    #
+
+    def test_index(self):
+        resp = self.app.get('/')
+        assert 'The last statement of' in resp.data
+
+    def test_execution_num(self):
+        resp = self.app.get('/execution/1')
+        assert 'The last statement of' in resp.data
+
+    def test_all(self):
+        resp = self.app.get('/all')
+        assert '500. Kimberly McCarthy' in resp.data
+
+    def test_all_text(self):
+        resp = self.app.get('/all/text')
+        assert 'Love one another' in resp.data
+
+    #
+    # Test admin routes
+    #
+
+    # def test_scrape(self):
+    #     resp = self.app.get('/admin/scrape')
+    #     assert 'Offenders imported:' in resp.data
+
+
 if __name__ == '__main__':
     unittest.main()
