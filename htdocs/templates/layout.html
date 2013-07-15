@@ -15,6 +15,19 @@
     {% block html_head %}{% endblock %}
 </head>
 <body>
-    {% block body %}{% endblock %}
+    <div id="page" class="wrap">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+
+        {% block body %}{% endblock %}
+    </div>
 </body>
 </html>

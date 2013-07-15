@@ -1,29 +1,27 @@
 {% extends "layout.html" %}
 {% block body %}
-    <div id="wrapper" class="wrapper home-wrap">
-        <h1 class="main-h1 home-h1">The last statement of {{ offender.first_name }} {{ offender.last_name }} <a class="icon permalink" href="{{ url_for('execution_num', num=offender.execution_num) }}" title="Permalink">→</a></h1>
-        <p class="intro">
-            On {{ exec_date }}, {{ offender.first_name }} {{ offender.last_name }} gave a last statement before his execution by the State of Texas.
+    <h1 class="main-h1 home-h1">The last statement of {{ offender.first_name }} {{ offender.last_name }} <a class="icon permalink" href="{{ url_for('execution_num', num=offender.execution_num) }}" title="Permalink">→</a></h1>
+    <p class="intro">
+        On {{ exec_date }}, {{ offender.first_name }} {{ offender.last_name }} gave a last statement before his execution by the State of Texas.
+    </p>
+
+    <div class="statement">
+        {% autoescape false %}
+            {{ offender.last_statement }}
+        {% endautoescape %}
+    </div>
+
+    <a id="info-btn" class="info-btn home-info-btn" href="#">?</a>
+
+    <div id="more-info" class="more-info">
+        <p>
+            Since the death penalty was reinstated in 1974, the State of Texas has executed {{ exec_total }} people.
         </p>
-
-        <div class="statement">
-            {% autoescape false %}
-                {{ offender.last_statement }}
-            {% endautoescape %}
-        </div>
-
-        <a id="info-btn" class="info-btn home-info-btn" href="#">?</a>
-
-        <div id="more-info" class="more-info">
-            <p>
-                Since the death penalty was reinstated in 1974, the State of Texas has executed {{ exec_total }} people.
-            </p>
-            <p>
-                Just before every execution, the State allows the prisoner to make a last statement, which is transcribed. The Texas Department of Criminal Justice publishes the final words of the executed <a href="http://www.tdcj.state.tx.us/death_row/dr_executed_offenders.html" title="Executed Offenders">on its website</a>.
-            </p>
-            <p>
-                This page shows one such statement made by a person whose execution anniversary is today (or, if that is not possible, the nearest applicable day).
-            </p>
-        </div>
+        <p>
+            Just before every execution, the State allows the prisoner to make a last statement, which is transcribed. The Texas Department of Criminal Justice publishes the final words of the executed <a href="http://www.tdcj.state.tx.us/death_row/dr_executed_offenders.html" title="Executed Offenders">on its website</a>.
+        </p>
+        <p>
+            This page shows one such statement made by a person whose execution anniversary is today (or, if that is not possible, the nearest applicable day).
+        </p>
     </div>
 {% endblock %}

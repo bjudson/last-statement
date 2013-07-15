@@ -9,13 +9,17 @@ from datetime import datetime
 from collections import OrderedDict
 # from pprint import PrettyPrinter
 
+from passlib.hash import bcrypt
 from bs4 import BeautifulSoup
 
-from flask import request, abort, render_template
+from flask import request, abort, render_template, url_for, flash, redirect
 from sqlalchemy.orm import exc
+from flask.ext.login import (LoginManager, login_user, logout_user,
+                             current_user, login_required)
 
 from last import app
-from models import db, Offender
+from models import db, User, Offender
+from forms import LoginForm, UserAddForm
 
 DEATH_ROW_URLS = {
     'base': 'http://www.tdcj.state.tx.us/death_row/',
@@ -23,14 +27,24 @@ DEATH_ROW_URLS = {
     'received': 'dr_offenders_on_dr.html'
 }
 
-JPG_INFO_PATH = '%s/%s' % (app.static_folder, 'info_img')
+# JPG_INFO_PATH = '%s/%s' % (app.static_folder, 'info_img')
+JPG_INFO_PATH = None
 
 os.environ['TZ'] = 'America/Chicago'
 time.tzset()
 
+login_manager = LoginManager()
+login_manager.login_view = 'login'
+login_manager.init_app(app)
+
 #
 # Helper functions
 #
+
+
+@login_manager.user_loader
+def load_user(userid):
+    return db.session.query(User).get(userid)
 
 
 def date2text(date=None):
@@ -153,16 +167,80 @@ def save_text():
 ###############################################################################
 
 
+@app.route('/login', methods=['GET', 'POST', 'OPTIONS'])
+def login():
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+
+        if user is not None and bcrypt.verify(form.password.data,
+                                              user.password):
+            if login_user(user):
+                user.last_login = datetime.now()
+                db.session.commit()
+
+                flash('Logged in %s' % user.email, 'success')
+                return redirect(request.args.get('next') or
+                                url_for('dashboard'))
+            else:
+                flash('This user is disabled', 'error')
+        else:
+            flash('Wrong email or password', 'error')
+
+    return render_template('login.html', form=form)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You have logged out', 'success')
+    return redirect(url_for('index'))
+
+
+@app.route('/admin', methods=['GET', 'OPTIONS'])
+@login_required
+def dashboard():
+    return render_template('dashboard.html', user=current_user.email)
+
+
+@app.route('/admin/users/add', methods=['GET', 'POST', 'OPTIONS'])
+@login_required
+def user_add():
+    form = UserAddForm()
+
+    if request.method == 'POST':
+        email = request.form.get('email')
+        existing = db.session.query(User).filter(User.email == email).first()
+
+        if existing is None:
+            password = bcrypt.encrypt(request.form.get('password'), rounds=12)
+
+            # try:
+            u = User(email=email, password=password)
+
+            db.session.add(u)
+            db.session.commit()
+
+            return redirect(url_for('dashboard'))
+            # except:
+            #     flash("Unable to save user.")
+        else:
+            flash("Email already exists.")
+
+        return render_template('user_add.html', form=form)
+    else:
+        return render_template('user_add.html', form=form)
+
+
 @app.route('/admin/scrape', methods=['GET', 'OPTIONS'])
+@login_required
 def scrape():
     """ Scrape data from TDCJ and save any new records found
         TODO: Scrape extra offender data. Much of this is in jpg files, so we
               will not be able to get a complete data set.
     """
-
-    token = request.headers.get('Authorize')
-    if token != '79IjustWantSomebasicSecurity!':
-        abort(404)
 
     #
     # Scrape basic info for all executed offenders
