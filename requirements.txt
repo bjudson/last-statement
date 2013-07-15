@@ -1,9 +1,16 @@
 Flask==0.10.1
+Flask-Login==0.2.5
 Flask-SQLAlchemy==0.16
+Flask-WTF==0.8.4
 Jinja2==2.7
 MarkupSafe==0.18
 SQLAlchemy==0.8.1
+WTForms==1.0.4
 Werkzeug==0.9.1
 beautifulsoup4==4.2.1
+cffi==0.6
 itsdangerous==0.21
+passlib==1.6.1
 psycopg2==2.5.1
+py-bcrypt==0.3
+pycparser==2.09.1
