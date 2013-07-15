@@ -1,12 +1,10 @@
 {% extends "layout.html" %}
 {% block body %}
-    <div id="wrapper" class="wrapper scrape-wrap">
-        <h1 class="main-h1">Scrape completed</h1>
-        <ul>
-            <li>Offenders imported: {{ new_offenders }}</li>
-            <li>Statements imported: {{ new_statements }}</li>
-            <li>Statements failed: {{ statements_failed }}</li>
-            <li>Info jpgs downloaded: {{ info_jpgs_downloaded }}</li>
-        </ul>
-    </div>
+    <h1 class="main-h1">Scrape completed</h1>
+    <ul>
+        <li>Offenders imported: {{ new_offenders }}</li>
+        <li>Statements imported: {{ new_statements }}</li>
+        <li>Statements failed: {{ statements_failed }}</li>
+        <li>Info jpgs downloaded: {{ info_jpgs_downloaded }}</li>
+    </ul>
 {% endblock %}
