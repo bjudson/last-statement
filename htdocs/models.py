@@ -3,6 +3,7 @@
 from datetime import datetime
 
 from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy.dialects import postgresql
 from flask.ext.login import UserMixin
 
 from last import app
@@ -77,3 +78,14 @@ class Offender(db.Model):
         self.last_statement = last_statement
         self.info_url = info_url
         self.statement_url = statement_url
+
+
+class Term(db.Model):
+    __tablename__ = 'terms'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(50))
+    words = db.Column(postgresql.ARRAY(db.String(50)))
+
+    def __init__(self, title=None, words=None):
+        self.title = title
+        self.words = words
