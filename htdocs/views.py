@@ -18,7 +18,7 @@ from flask.ext.login import (LoginManager, login_user, logout_user,
                              current_user, login_required)
 
 from last import app
-from models import db, User, Offender
+from models import db, User, Offender, Term
 from forms import LoginForm, UserAddForm
 
 DEATH_ROW_URLS = {
@@ -158,6 +158,23 @@ def save_text():
     text = re.sub('<[^<]+?>', '', ' '.join(corpus))
 
     return render_template('text.html', body=text)
+
+
+@app.route('/terms', methods=['GET', 'OPTIONS'])
+def terms_index():
+    terms = db.session.query(Term).all()
+    term_dict = {}
+
+    for t in terms:
+        count = db.session.query(Offender).\
+            filter('to_tsvector(offenders.last_statement) '
+                   '@@ to_tsquery(\'%s\')' % ' | '.join(t.words)).count()
+        term_dict[t.title] = count
+
+    term_dict = OrderedDict(sorted(term_dict.items(), key=lambda t: t[1],
+                            reverse=True))
+
+    return render_template('terms.html', terms=term_dict)
 
 
 ###############################################################################

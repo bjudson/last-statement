@@ -83,6 +83,13 @@ a, a:active {
     padding: 1em 0 .5em 0;
 }
 
+ul.terms {
+    list-style: none;
+    padding: 0;
+    text-transform: capitalize;
+    line-height: 1.8em;
+}
+
 .meta {
     color: #666;
 }
