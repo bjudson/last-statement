@@ -162,19 +162,40 @@ def save_text():
 
 @app.route('/terms', methods=['GET', 'OPTIONS'])
 def terms_index():
-    terms = db.session.query(Term).all()
-    term_dict = {}
+    if request.args.get('view'):
+        term = request.args.get('view')
+        term_view = db.session.query(Term).filter(Term.title == term).first()
+        terms = db.session.query(Term).filter(Term.title != term)
+        term_dict = {}
 
-    for t in terms:
-        count = db.session.query(Offender).\
-            filter('to_tsvector(offenders.last_statement) '
-                   '@@ to_tsquery(\'%s\')' % ' | '.join(t.words)).count()
-        term_dict[t.title] = count
+        for t in terms:
+            viewing = ' | '.join(term_view.words)
+            against = ' | '.join(t.words)
+            count = db.session.query(Offender).\
+                filter('to_tsvector(offenders.last_statement) '
+                       '@@ to_tsquery(\'(%s) & (%s)\')' % (viewing, against)).\
+                count()
+            term_dict[t.title] = count
 
-    term_dict = OrderedDict(sorted(term_dict.items(), key=lambda t: t[1],
-                            reverse=True))
+        term_dict = OrderedDict(sorted(term_dict.items(), key=lambda t: t[1],
+                                reverse=True))
 
-    return render_template('terms.html', terms=term_dict)
+        return render_template('terms.html', viewing=term_view,
+                               terms=term_dict)
+    else:
+        terms = db.session.query(Term).all()
+        term_dict = {}
+
+        for t in terms:
+            count = db.session.query(Offender).\
+                filter('to_tsvector(offenders.last_statement) '
+                       '@@ to_tsquery(\'%s\')' % ' | '.join(t.words)).count()
+            term_dict[t.title] = count
+
+        term_dict = OrderedDict(sorted(term_dict.items(), key=lambda t: t[1],
+                                reverse=True))
+
+        return render_template('terms.html', terms=term_dict)
 
 
 ###############################################################################

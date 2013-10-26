@@ -59,6 +59,10 @@ class LastStatementTestCase(unittest.TestCase):
         resp = self.app.get('/all/text')
         assert 'Love one another' in resp.data
 
+    def test_terms_index(self):
+        resp = self.app.get('/terms')
+        assert 'love' in resp.data
+
     #
     # Test admin routes
     #
