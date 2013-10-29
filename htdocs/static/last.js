@@ -30,7 +30,7 @@ $(document).ready(function(){
                 $('.main-h1').text('The term does not exist');
             }else{
                 // TODO: set height based on number of terms
-                var svg = dimple.newSvg('.term-chart', '100%', 800);
+                var svg = dimple.newSvg('.term-chart', '100%', 700);
 
                 if(data['statements']){
                     printStatements(data['statements']);
