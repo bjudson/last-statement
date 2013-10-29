@@ -29,14 +29,8 @@ $(document).ready(function(){
             if(data['success'] == 'false'){
                 $('.main-h1').text('The term does not exist');
             }else{
-                // TODO: set height based on number of terms
-                var svg = dimple.newSvg('.term-chart', '100%', 700);
-
-                if(data['statements']){
-                    printStatements(data['statements']);
-                }else{
-                    $('.statements').hide();
-                }
+                var termCount = data['terms'].length,
+                    svg = dimple.newSvg('.term-chart', '100%', termCount * 35);
 
                 // Basic chart setup
                 termChart = new dimple.chart(svg, data['terms']);
@@ -54,6 +48,12 @@ $(document).ready(function(){
                 s.addEventHandler("mouseover", onBarHover);
                 s.addEventHandler("mouseleave", onBarLeave);
                 s.addEventHandler("click", onBarClick);
+
+                if(data['statements']){
+                    printStatements(data['statements']);
+                }else{
+                    $('.statements').hide();
+                }
 
                 drawChart();
             }
@@ -80,6 +80,7 @@ $(document).ready(function(){
                     out += $(this)[0]['statement'];
                 });
                 $('.statement-list').html(out);
+                $('.statements h1').text(statements.length + ' statements referencing “' + termChart.viewing + '”');
                 $('.statements').fadeIn(500);
             }
 
