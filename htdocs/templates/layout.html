@@ -3,15 +3,12 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
     <title>{% block title %}Last Statement{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="/static/last.css?v=5">
-    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <script src="/static/last.js?v=2"></script>
-
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+    <link rel="stylesheet" type="text/css" href="/static/last.css?v=5">
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
     {% block html_head %}{% endblock %}
 </head>
 <body>
@@ -26,8 +23,13 @@
             {% endif %}
         {% endwith %}
 
-
         {% block body %}{% endblock %}
     </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="/static/lib/d3.min.js"></script>
+    <script src="/static/lib/dimple.v1.1.1.min.js"></script>
+    <script src="/static/last.js?v=2"></script>
+    {% block body_end %}{% endblock %}
 </body>
 </html>

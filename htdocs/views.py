@@ -12,7 +12,8 @@ from collections import OrderedDict
 from passlib.hash import bcrypt
 from bs4 import BeautifulSoup
 
-from flask import request, abort, render_template, url_for, flash, redirect
+from flask import (request, abort, render_template, url_for, flash, redirect,
+                   jsonify)
 from sqlalchemy.orm import exc
 from flask.ext.login import (LoginManager, login_user, logout_user,
                              current_user, login_required)
@@ -196,6 +197,58 @@ def terms_index():
                                 reverse=True))
 
         return render_template('terms.html', terms=term_dict)
+
+
+@app.route('/terms/data/', methods=['GET', 'OPTIONS'])
+def terms_data_all():
+    terms = db.session.query(Term).all()
+    term_list = []
+
+    for t in terms:
+        count = db.session.query(Offender).\
+            filter('to_tsvector(offenders.last_statement) '
+                   '@@ to_tsquery(\'%s\')' % ' | '.join(t.words)).count()
+        term_list.append({'term': t.title, 'count': str(count)})
+
+    term_list = sorted(term_list, key=lambda t: t['count'])
+
+    return jsonify(success='true', terms=term_list)
+
+
+@app.route('/terms/data/<term>', methods=['GET', 'OPTIONS'])
+def terms_data_single(term):
+    term_view = db.session.query(Term).filter(Term.title == term).first()
+
+    if(term_view is not None):
+        terms = db.session.query(Term).filter(Term.title != term)
+        term_list = []
+
+        offenders = db.session.query(Offender).\
+            filter('to_tsvector(offenders.last_statement) '
+                   '@@ to_tsquery(\'%s\')' % ' | '.join(term_view.words)).\
+            order_by(Offender.execution_date).all()
+
+        statements = [{'statement': o.last_statement,
+                       'name': '%s %s' % (o.first_name, o.last_name),
+                       'date': date2text(o.execution_date)
+                       } for o in offenders]
+
+        for t in terms:
+            viewing = ' | '.join(term_view.words)
+            against = ' | '.join(t.words)
+            count = db.session.query(Offender).\
+                filter('to_tsvector(offenders.last_statement) '
+                       '@@ to_tsquery(\'(%s) & (%s)\')' % (viewing, against)).\
+                count()
+            term_list.append({'term': t.title, 'count': count})
+
+        term_list = sorted(term_list, key=lambda t: t['count'])
+        term_view = {'title': term_view.title, 'words': term_view.words}
+
+        return jsonify(success='true', viewing=term_view, terms=term_list,
+                       statements=statements)
+    else:
+        return jsonify(success='false')
 
 
 ###############################################################################
