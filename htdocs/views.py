@@ -201,7 +201,7 @@ def terms_index():
 
 @app.route('/terms/data/', methods=['GET', 'OPTIONS'])
 def terms_data_all():
-    terms = db.session.query(Term).all()
+    terms = db.session.query(Term).filter(Term.chart).all()
     term_list = []
 
     for t in terms:
@@ -220,7 +220,7 @@ def terms_data_single(term):
     term_view = db.session.query(Term).filter(Term.title == term).first()
 
     if(term_view is not None):
-        terms = db.session.query(Term).filter(Term.title != term)
+        terms = db.session.query(Term).filter(Term.title != term, Term.chart)
         term_list = []
 
         offenders = db.session.query(Offender).\

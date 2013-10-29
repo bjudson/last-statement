@@ -85,6 +85,7 @@ class Term(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50))
     words = db.Column(postgresql.ARRAY(db.String(50)))
+    chart = db.Column(db.Boolean)
 
     def __init__(self, title=None, words=None):
         self.title = title
