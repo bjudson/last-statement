@@ -1,15 +1,14 @@
 {% extends "layout.html" %}
 {% block body %}
-    <h1 class="main-h1 terms-h1">Some concepts found in last statements</h1>
-    <p class="intro">
-        Displayed in order of popularity.
-    </p>
+    <section class="terms">
+        <h1 class="main-h1 terms-h1">Some concepts found<span id="alongside-term"></span> in last statements</h1>
+        <div class="term-chart"></div>
+    </section>
 
-    <ul class="terms">
-        {% for title, count in terms.iteritems() %}
-            <li data-count="{{ count }}">{{ title }}: {{ count }}</li>
-        {% endfor %}
-    </ul>
+    <section class="statements">
+        <h1><span class="statement-count"></span>Statements</h1>
+        <div class="statement-list"></div>
+    </section>
 
     <a id="info-btn" class="info-btn home-info-btn" href="#">?</a>
 

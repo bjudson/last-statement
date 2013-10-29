@@ -131,3 +131,47 @@ ul.terms {
     line-height: 1.6em;
     font-size: .9em;
 }
+
+.statements {
+    display: none;
+}
+
+.term-chart {
+    display: none;
+    background: #fff;
+    border: 1px solid #ccc;
+}
+
+.term-chart .axis .tick {
+    font-size: .8em;
+}
+
+.term-chart .gridlines line {
+    stroke: #ccc;
+    shape-rendering: crispedges;
+}
+
+.term-chart .axis .domain {
+    width: 1px;
+    fill: none;
+    stroke: #222;
+    shape-rendering: crispedges;
+}
+
+.term-chart .bar {
+    fill: #000;
+    cursor: pointer;
+    transition: fill .5s;
+}
+
+.term-chart .bar:hover {
+    fill: #0979C9;
+}
+
+.term-chart .yAxis {
+    cursor: pointer;
+}
+
+.term-chart .yAxis:hover {
+    fill: #0979C9;
+}
