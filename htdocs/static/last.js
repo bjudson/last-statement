@@ -57,21 +57,22 @@ $(document).ready(function(){
                 }
 
                 if(data['years']){
-                    drawYearChart();
+                    drawYearChart(data['years']);
                 }
 
                 drawTermChart();
             }
 
-            function drawYearChart() {
+            function drawYearChart(yearData) {
                 if(!yearChart){
-                    console.log(yearChart);
                     var yearSvg = dimple.newSvg('.year-chart', '100%', 300);
-                    yearChart = new dimple.chart(yearSvg, data['years']);
+                    yearChart = new dimple.chart(yearSvg, yearData);
                     yearChart.setMargins("30px", "20px", "20px", "70px");
                     yearChart.addCategoryAxis('x', 'year');
                     yearChart.addMeasureAxis('y', 'percent');
                     yearChart.addSeries(null, dimple.plot.line);
+                }else{
+                    yearChart.data = yearData;
                 }
 
                 $('.years').fadeIn(500);
@@ -116,8 +117,7 @@ $(document).ready(function(){
                         popup.remove();
                     }
                     if(data['years']){
-                        yearChart.data = data['years'];
-                        drawYearChart();
+                        drawYearChart(data['years']);
                     }
                 });
             }
