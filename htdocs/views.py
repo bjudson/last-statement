@@ -15,6 +15,7 @@ from bs4 import BeautifulSoup
 from flask import (request, abort, render_template, url_for, flash, redirect,
                    jsonify)
 from sqlalchemy.orm import exc
+from sqlalchemy.sql import func
 from flask.ext.login import (LoginManager, login_user, logout_user,
                              current_user, login_required)
 
@@ -222,16 +223,35 @@ def terms_data_single(term):
     if(term_view is not None):
         terms = db.session.query(Term).filter(Term.title != term, Term.chart)
         term_list = []
+        year_dict = {}
+        year_perc = []
+        statements = []
 
         offenders = db.session.query(Offender).\
             filter('to_tsvector(offenders.last_statement) '
                    '@@ to_tsquery(\'%s\')' % ' | '.join(term_view.words)).\
             order_by(Offender.execution_date).all()
 
-        statements = [{'statement': o.last_statement,
-                       'name': '%s %s' % (o.first_name, o.last_name),
-                       'date': date2text(o.execution_date)
-                       } for o in offenders]
+        year_counts = db.session.query(Offender.execution_year,
+                                       func.count(Offender.execution_year)).\
+            group_by(Offender.execution_year).all()
+
+        year_total = {str(int(y[0])): y[1] for y in year_counts}
+
+        for o in offenders:
+            statements.append({'statement': o.last_statement,
+                               'name': '%s %s' % (o.first_name, o.last_name),
+                               'date': date2text(o.execution_date)})
+
+            try:
+                year_dict[str(o.execution_date.year)] += 1
+            except KeyError:
+                year_dict[str(o.execution_date.year)] = 1
+
+        for y, c in year_total.items():
+            stmt_count = year_dict.get(y, 0)
+            percent = round(float(stmt_count) / float(c) * 100, 1)
+            year_perc.append({'year': y, 'percent': percent})
 
         for t in terms:
             viewing = ' | '.join(term_view.words)
@@ -246,7 +266,7 @@ def terms_data_single(term):
         term_view = {'title': term_view.title, 'words': term_view.words}
 
         return jsonify(success='true', viewing=term_view, terms=term_list,
-                       statements=statements)
+                       years=year_perc, statements=statements)
     else:
         return jsonify(success='false')
 

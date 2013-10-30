@@ -21,6 +21,7 @@ $(document).ready(function(){
         var termView = location.hash.replace('#',''),
             url = "/terms/data/" + termView,
             termChart,
+            yearChart = false,
             x,
             y,
             s;
@@ -30,13 +31,13 @@ $(document).ready(function(){
                 $('.main-h1').text('The term does not exist');
             }else{
                 var termCount = data['terms'].length,
-                    svg = dimple.newSvg('.term-chart', '100%', termCount * 35);
+                    termSvg = dimple.newSvg('.term-chart', '100%', termCount * 35);
 
                 // Basic chart setup
-                termChart = new dimple.chart(svg, data['terms']);
+                termChart = new dimple.chart(termSvg, data['terms']);
                 if(termView != '') termChart.viewing = termView;
                 termChart.noFormats = true;
-                termChart.setMargins("100px", "30px", "40px", "70px");
+                termChart.setMargins("100px", "20px", "40px", "70px");
 
                 // Create axes
                 x = termChart.addMeasureAxis("x", "count");
@@ -55,10 +56,30 @@ $(document).ready(function(){
                     $('.statements').hide();
                 }
 
-                drawChart();
+                if(data['years']){
+                    drawYearChart();
+                }
+
+                drawTermChart();
             }
 
-            function drawChart(noData) {
+            function drawYearChart() {
+                if(!yearChart){
+                    console.log(yearChart);
+                    var yearSvg = dimple.newSvg('.year-chart', '100%', 300);
+                    yearChart = new dimple.chart(yearSvg, data['years']);
+                    yearChart.setMargins("30px", "20px", "20px", "70px");
+                    yearChart.addCategoryAxis('x', 'year');
+                    yearChart.addMeasureAxis('y', 'percent');
+                    yearChart.addSeries(null, dimple.plot.line);
+                }
+
+                $('.years').fadeIn(500);
+                $('.years h1').text('Percent of statements referencing “' + termChart.viewing + '” by year');
+                yearChart.draw();
+            }
+
+            function drawTermChart(noData) {
                 var noData = noData || false
 
                 $('.term-chart').fadeIn(500);
@@ -90,9 +111,13 @@ $(document).ready(function(){
                     termChart.data = data['terms'];
                     termChart.viewing = term;
                     printStatements(data['statements']);
-                    drawChart();
+                    drawTermChart();
                     if (typeof popup != 'undefined') {
                         popup.remove();
+                    }
+                    if(data['years']){
+                        yearChart.data = data['years'];
+                        drawYearChart();
                     }
                 });
             }
@@ -119,7 +144,7 @@ $(document).ready(function(){
                 var x = cx + cWidth + 5,
                     y = cy + Math.round(cHeight / 2) + 5;
                 // Create a group for the popup objects
-                popup = svg.append("g");
+                popup = termSvg.append("g");
 
                 // Add multiple lines of text
                 popup.append('text')
@@ -146,7 +171,7 @@ $(document).ready(function(){
                 // As of 1.1.0 the second parameter here allows you to draw
                 // without reprocessing data.  This saves a lot on performance
                 // when you know the data won't have changed.
-                drawChart(true);
+                drawTermChart(true);
             };
         });
     }
