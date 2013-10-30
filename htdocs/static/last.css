@@ -138,8 +138,6 @@ ul.terms {
 
 .term-chart {
     display: none;
-    background: #fff;
-    border: 1px solid #ccc;
 }
 
 .term-chart .axis .tick {
@@ -174,4 +172,8 @@ ul.terms {
 
 .term-chart .yAxis:hover {
     fill: #0979C9;
+}
+
+.years {
+    display: none;
 }
