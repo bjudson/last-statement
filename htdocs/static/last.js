@@ -67,9 +67,9 @@ $(document).ready(function(){
                 if(!yearChart){
                     var yearSvg = dimple.newSvg('.year-chart', '100%', 300);
                     yearChart = new dimple.chart(yearSvg, yearData);
-                    yearChart.setMargins("30px", "20px", "20px", "70px");
-                    yearChart.addCategoryAxis('x', 'year');
-                    yearChart.addMeasureAxis('y', 'percent');
+                    yearChart.setMargins("65px", "20px", "20px", "50px");
+                    var yrX = yearChart.addCategoryAxis('x', 'year');
+                    var yrY = yearChart.addMeasureAxis('y', 'percent');
                     yearChart.addSeries(null, dimple.plot.line);
                 }else{
                     yearChart.data = yearData;
@@ -78,6 +78,8 @@ $(document).ready(function(){
                 $('.years').fadeIn(500);
                 $('.years h1').text('Percent of statements referencing “' + termChart.viewing + '” by year');
                 yearChart.draw();
+                yrY.titleShape.remove();
+                yrX.titleShape.remove();
             }
 
             function drawTermChart(noData) {

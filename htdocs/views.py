@@ -251,7 +251,8 @@ def terms_data_single(term):
         for y, c in year_total.items():
             stmt_count = year_dict.get(y, 0)
             percent = round(float(stmt_count) / float(c) * 100, 1)
-            year_perc.append({'year': y, 'percent': percent})
+            year_perc.append({'year': y, 'percent': percent,
+                              'count': stmt_count})
 
         for t in terms:
             viewing = ' | '.join(term_view.words)
