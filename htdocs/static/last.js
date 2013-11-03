@@ -21,12 +21,14 @@ $(document).ready(function(){
         var termView = location.hash.replace('#',''),
             url = "/terms/data/" + termView,
             termChart,
-            yearChart = false,
             x,
             y,
             s;
 
         d3.json(url, function (data) {
+            this.yearChart = false;
+            this.monthChart = false;
+
             if(data['success'] == 'false'){
                 $('.main-h1').text('The term does not exist');
             }else{
@@ -57,29 +59,41 @@ $(document).ready(function(){
                 }
 
                 if(data['years']){
-                    drawYearChart(data['years']);
+                    drawTimeChart(data['years'], 'year');
+                }
+
+                if(data['months']){
+                    drawTimeChart(data['months'], 'month');
                 }
 
                 drawTermChart();
             }
 
-            function drawYearChart(yearData) {
-                if(!yearChart){
-                    var yearSvg = dimple.newSvg('.year-chart', '100%', 300);
-                    yearChart = new dimple.chart(yearSvg, yearData);
-                    yearChart.setMargins("65px", "20px", "20px", "50px");
-                    var yrX = yearChart.addCategoryAxis('x', 'year');
-                    var yrY = yearChart.addMeasureAxis('y', 'percent');
-                    yearChart.addSeries(null, dimple.plot.line);
+            function drawTimeChart(timeData, type) {
+                var chart = this[type + 'Chart'],
+                    contClass = '.' + type + 's';
+
+                if(!chart){
+                    this[type + 'Svg'] = dimple.newSvg(contClass + ' .chart', '100%', 300);
+                    chart = new dimple.chart(this[type + 'Svg'], timeData);
+                    chart.setMargins("65px", "20px", "20px", "50px");
+                    chart.timeX = chart.addCategoryAxis('x', type);
+                    chart.timeY = chart.addMeasureAxis('y', 'percent');
+                    chart.addSeries(null, dimple.plot.line);
+
+                    if(type == 'month'){
+                        chart.timeX.addOrderRule(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]);
+                    }
                 }else{
-                    yearChart.data = yearData;
+                    chart.data = timeData;
                 }
 
-                $('.years').fadeIn(500);
-                $('.years h1').text('Percent of statements referencing “' + termChart.viewing + '” by year');
-                yearChart.draw();
-                yrY.titleShape.remove();
-                yrX.titleShape.remove();
+                $(contClass).fadeIn(500);
+                $(contClass + ' h1').text('Percent of statements referencing “' + termChart.viewing + '” by ' + type);
+                chart.draw();
+                chart.timeX.titleShape.remove();
+                chart.timeY.titleShape.remove();
+                this[type + 'Chart'] = chart;
             }
 
             function drawTermChart(noData) {
@@ -119,7 +133,10 @@ $(document).ready(function(){
                         popup.remove();
                     }
                     if(data['years']){
-                        drawYearChart(data['years']);
+                        drawTimeChart(data['years'], 'year');
+                    }
+                    if(data['months']){
+                        drawTimeChart(data['months'], 'month');
                     }
                 });
             }
@@ -170,9 +187,6 @@ $(document).ready(function(){
 
             // Add a method to draw the chart on resize of the window
             window.onresize = function () {
-                // As of 1.1.0 the second parameter here allows you to draw
-                // without reprocessing data.  This saves a lot on performance
-                // when you know the data won't have changed.
                 drawTermChart(true);
             };
         });
