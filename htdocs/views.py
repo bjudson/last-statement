@@ -82,11 +82,13 @@ def get_span_totals(type):
     if(type in ['month', 'year']):
         col = getattr(Offender, 'execution_%s' % type)
 
-    span_counts = db.session.query(col, func.count(col)).\
-        filter(Offender.last_statement != None).\
-        group_by(col).all()
+        span_counts = db.session.query(col, func.count(col)).\
+            filter(Offender.last_statement != None).\
+            group_by(col).all()
 
-    return {str(int(s[0])): s[1] for s in span_counts}
+        return {str(int(s[0])): s[1] for s in span_counts}
+    else:
+        return {}
 
 
 def get_colocations(term):

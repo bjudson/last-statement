@@ -40,6 +40,41 @@ class LastStatementTestCase(unittest.TestCase):
             assert int(doy) == doy2
 
     #
+    # Test data functions
+    #
+
+    def test_get_span_totals(self):
+        good_types = ['month', 'year']
+        bad_types = ['foo', 'day']
+
+        for t in good_types:
+            totals = views.get_span_totals(t)
+            assert type(totals) == dict and len(totals) > 0
+
+        for t in bad_types:
+            totals = views.get_span_totals(t)
+            assert type(totals) == dict and len(totals) == 0
+
+    def test_get_colocations(self):
+        terms = ['god', 'family']
+
+        for t in terms:
+            term_view = views.db.session.query(views.Term).\
+                filter(views.Term.title == t).first()
+            results = views.get_colocations(term_view)
+            assert type(results) == list and len(results) > 0
+
+    def test_statement_time_calc(self):
+        good_types = ['month', 'year']
+        offenders = views.db.session.query(views.Offender).\
+            filter(views.Offender.last_statement != None).\
+            limit(10)
+
+        for t in good_types:
+            results = views.statement_time_calc(offenders, t)
+            assert type(results) == list and len(results) > 0
+
+    #
     # Test public routes
     #
 
@@ -61,7 +96,22 @@ class LastStatementTestCase(unittest.TestCase):
 
     def test_terms_index(self):
         resp = self.app.get('/terms')
-        assert 'love' in resp.data
+        assert 'chart' in resp.data
+
+    def test_terms_data(self):
+        terms = ['god', 'love']
+
+        for t in terms:
+            resp = self.app.get('/terms/data/')
+            assert 'count' in resp.data
+
+    def test_terms_data_term(self):
+        terms = ['god', 'love']
+
+        for t in terms:
+            resp = self.app.get('/terms/data/%s' % t)
+            assert 'statement' in resp.data
+            assert 'count' in resp.data
 
     #
     # Test admin routes
