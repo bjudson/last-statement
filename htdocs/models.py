@@ -49,6 +49,7 @@ class Offender(db.Model):
     execution_num = db.Column(db.Integer)
     execution_date = db.Column(db.Date)
     execution_year = func.date_part('year', execution_date)
+    execution_month = func.date_part('month', execution_date)
     execution_day = db.Column(db.Integer)
     offense_date = db.Column(db.Date)
     offense_county = db.Column(db.String(50))
