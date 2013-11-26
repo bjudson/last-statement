@@ -2,10 +2,10 @@ $(document).ready(function(){
     $('#info-btn').on('click', function(event){
         var btn = $('#info-btn');
 
-        if(btn.hasClass('info-btn-selected')){
-            btn.removeClass('info-btn-selected');
+        if(btn.hasClass('icon-btn-selected')){
+            btn.removeClass('icon-btn-selected');
         }else{
-            btn.addClass('info-btn-selected');
+            btn.addClass('icon-btn-selected');
         }
 
         $('#more-info').slideToggle('fast');
@@ -16,6 +16,7 @@ $(document).ready(function(){
     if($('.term-chart')){
         var termView = location.hash.replace('#',''),
             url = "/terms/data/" + termView,
+            months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             termChart,
             x,
             y,
@@ -80,7 +81,7 @@ $(document).ready(function(){
                     chart.addSeries(null, dimple.plot.line);
 
                     if(type == 'month'){
-                        chart.timeX.addOrderRule(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]);
+                        chart.timeX.addOrderRule(months);
                     }
                 }else{
                     chart.data = timeData;
@@ -91,6 +92,9 @@ $(document).ready(function(){
                 chart.draw();
                 chart.timeX.titleShape.remove();
                 chart.timeY.titleShape.remove();
+                chart.timeX.shapes.selectAll('text')
+                    .on('click', onTimeLabelClick);
+                chart.timeX.shapes.selectAll('g').classed('xAxis', true);
                 this[type + 'Chart'] = chart;
             }
 
@@ -101,7 +105,7 @@ $(document).ready(function(){
                 termChart.draw(0, noData);
                 y.titleShape.remove();
                 y.shapes.selectAll('text')
-                    .on('click', onLabelClick);
+                    .on('click', onTermLabelClick);
                 y.shapes.selectAll('g').classed('yAxis', true);
                 x.titleShape.text("Occurences");
                 if(termChart.viewing){
@@ -112,11 +116,13 @@ $(document).ready(function(){
             function printStatements(statements) {
                 var out = '';
                 $.each(statements, function(){
+                    out += '<div class="statement" data-month="' + $(this)[0]['month'] + '" data-year="' + $(this)[0]['year'] + '">';
                     out += '<h2>' + $(this)[0]['date'] + ': ' + $(this)[0]['name'] + '</h2>';
                     out += $(this)[0]['statement'];
+                    out += '</div>';
                 });
                 $('.statement-list').html(out);
-                $('.statements h1').text(statements.length + ' statements referencing “' + termChart.viewing + '”');
+                $('.statements h1').html('<span class="stmt-count">' + statements.length + '</span> statements <span class="stmt-filter"></span> referencing “' + termChart.viewing + '”');
                 $('.statements').fadeIn(500);
             }
 
@@ -139,7 +145,24 @@ $(document).ready(function(){
                 });
             }
 
-            function onLabelClick(e) {
+            function onTimeLabelClick(e) {
+                var monthNum = months.indexOf(e) + 1
+
+                $('.statement').show();
+                $('.stmt-filter').html('in ' + e + '<a href="javascript:void(0)" id="clear-stmt-filter">×</a>')
+
+                if(monthNum > 0){
+                    $('.statement:not([data-month=' + monthNum + '])').hide();
+                    $('.stmt-count').text($('.statement[data-month=' + monthNum + ']').length);
+                }else{
+                    $('.statement:not([data-year=' + e + '])').hide();
+                    $('.stmt-count').text($('.statement[data-year=' + e + ']').length);
+                }
+
+
+            }
+
+            function onTermLabelClick(e) {
                 document.location.href = '/terms#' + e;
                 getNewData(e);
             }
@@ -182,6 +205,12 @@ $(document).ready(function(){
                     popup.remove();
                 }
             };
+
+            $('.statements h1').on('click', '#clear-stmt-filter', function(e){
+                e.preventDefault();
+                $('.stmt-filter').html('');
+                $('.stmt-count').text($('.statement').show().length);
+            });
 
             // Add a method to draw the chart on resize of the window
             window.onresize = function () {

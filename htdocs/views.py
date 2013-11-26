@@ -283,7 +283,9 @@ def terms_data_single(term):
         for o in offenders:
             statements.append({'statement': o.last_statement,
                                'name': '%s %s' % (o.first_name, o.last_name),
-                               'date': date2text(o.execution_date)})
+                               'date': date2text(o.execution_date),
+                               'month': o.execution_date.month,
+                               'year': o.execution_date.year})
 
         term_view = {'title': term_view.title, 'words': term_view.words}
 

@@ -171,14 +171,31 @@ ul.terms {
     fill: #0979C9;
 }
 
-.term-chart .yAxis {
+.term-chart .yAxis, .year-chart .xAxis, .month-chart .xAxis {
     cursor: pointer;
 }
 
-.term-chart .yAxis:hover {
+.term-chart .yAxis:hover, .year-chart .xAxis:hover, .month-chart .xAxis:hover {
     fill: #0979C9;
 }
 
 .years, .months {
     display: none;
+}
+
+#clear-stmt-filter {
+    display: inline-block;
+    text-decoration: none;
+    text-shadow: none;
+    text-align: center;
+    color: #fefeee;
+    font-size: .6em;
+    background: #900;
+    border-radius: 1.5em;
+    line-height: 1em;
+    position: relative;
+    top: -5px;
+    width: 1em;
+    height: 1em;
+    margin: 0 5px;
 }
