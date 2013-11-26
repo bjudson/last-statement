@@ -10,10 +10,6 @@ $(document).ready(function(){
 
         $('#more-info').slideToggle('fast');
 
-        $('html, body').animate({
-            scrollTop: btn.offset().top + 500
-        }, 1000);
-
         return false;
     });
 
@@ -67,6 +63,8 @@ $(document).ready(function(){
                 }
 
                 drawTermChart();
+
+                $('.term-chart-info').text('Click a term to drill down');
             }
 
             function drawTimeChart(timeData, type) {

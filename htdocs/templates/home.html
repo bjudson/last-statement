@@ -1,17 +1,8 @@
 {% extends "layout.html" %}
 {% block body %}
-    <h1 class="main-h1 home-h1">The last statement of {{ offender.first_name }} {{ offender.last_name }} <a class="icon permalink" href="{{ url_for('execution_num', num=offender.execution_num) }}" title="Permalink">→</a></h1>
-    <p class="intro">
-        On {{ exec_date }}, {{ offender.first_name }} {{ offender.last_name }} gave a last statement before his execution by the State of Texas.
-    </p>
-
-    <div class="statement">
-        {% autoescape false %}
-            {{ offender.last_statement }}
-        {% endautoescape %}
-    </div>
-
-    <a id="info-btn" class="info-btn home-info-btn" href="#">?</a>
+    <nav class="menu">
+        <a id="data-btn" class="icon-btn" href="terms" title="Go to last statement data">%</a> <a id="info-btn" class="icon-btn" href="javascript:void(0)" title="About this page">i</a>
+    </nav>
 
     <div id="more-info" class="more-info">
         <p>
@@ -23,5 +14,16 @@
         <p>
             This page shows one such statement made by a person whose execution anniversary is today (or, if that is not possible, the nearest applicable day).
         </p>
+    </div>
+
+    <h1 class="main-h1 home-h1">The last statement of {{ offender.first_name }} {{ offender.last_name }} <a class="icon permalink" href="{{ url_for('execution_num', num=offender.execution_num) }}" title="Permalink">→</a></h1>
+    <p class="intro">
+        On {{ exec_date }}, {{ offender.first_name }} {{ offender.last_name }} gave a last statement before his execution by the State of Texas.
+    </p>
+
+    <div class="statement">
+        {% autoescape false %}
+            {{ offender.last_statement }}
+        {% endautoescape %}
     </div>
 {% endblock %}
