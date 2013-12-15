@@ -14,7 +14,7 @@ from passlib.hash import bcrypt
 from bs4 import BeautifulSoup
 
 from flask import (request, abort, render_template, url_for, flash, redirect,
-                   jsonify)
+                   jsonify, Markup)
 from sqlalchemy.orm import exc
 from sqlalchemy.sql import func
 from flask.ext.login import (LoginManager, login_user, logout_user,
@@ -138,6 +138,41 @@ def statement_time_calc(offenders, type):
 
 ###############################################################################
 #
+#   Context processors
+#
+###############################################################################
+
+@app.context_processor
+def nav():
+    def top_nav(buttons=('home', 'info', 'github')):
+        html = u'<nav class="menu">'
+        for b in buttons:
+            if b == 'home':
+                html += (u'<a id="cal-btn" class="icon-btn" href="/" title="'
+                         u'Today’s last statement">☼</a> ')
+            if b == 'data':
+                html += (u'<a id="data-btn" class="icon-btn" href="terms" '
+                         u'title="Go to last statement data">%</a>')
+            if b == 'info':
+                html += (u'<a id="info-btn" class="icon-btn" href="javascript:'
+                         u'void(0)" title="About this page">i</a> ')
+            if b == 'github':
+                html += (u'<a id="github-btn" class="icon-btn" href="https://'
+                         u'github.com/bjudson/last-statement" title="Get the '
+                         u'code">#</a> ')
+        html += u'</nav>'
+
+        return Markup(html)
+    return dict(top_nav=top_nav)
+
+
+@app.context_processor
+def exec_total():
+    return dict(exec_total=db.session.query(Offender).count())
+
+
+###############################################################################
+#
 #   Public routes
 #
 ###############################################################################
@@ -162,11 +197,10 @@ def index():
     if offender is None:
         abort(404)
 
-    exec_total = db.session.query(Offender).count()
     exec_date = date2text(offender.execution_date)
 
     return render_template('home.html', offender=offender,
-                           exec_date=exec_date, exec_total=exec_total)
+                           exec_date=exec_date)
 
 
 @app.route("/execution/<num>", methods=['GET', 'OPTIONS'])
