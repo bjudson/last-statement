@@ -208,13 +208,16 @@ def execution_num(num):
     """ Find last statement by execution number
     """
 
-    offender = db.session.query(Offender.first_name, Offender.last_name,
-                                Offender.execution_date,
-                                Offender.last_statement).\
-        filter(Offender.execution_num == num).\
-        first()
+    if num.isdigit():
+        offender = db.session.query(Offender.first_name, Offender.last_name,
+                                    Offender.execution_date,
+                                    Offender.last_statement).\
+            filter(Offender.execution_num == num).\
+            first()
 
-    if offender is None:
+        if offender is None:
+            abort(404)
+    else:
         abort(404)
 
     exec_date_text = offender.execution_date.strftime('%-d %B %Y')
