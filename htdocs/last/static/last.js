@@ -15,7 +15,7 @@ $(document).ready(function(){
 
     if($('.term-chart')){
         var termView = location.hash.replace('#',''),
-            url = "/terms/data/" + termView,
+            url = "/api/1/terms/data/" + termView,
             months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             termChart,
             x,
@@ -127,7 +127,7 @@ $(document).ready(function(){
             }
 
             function getNewData(term) {
-                var url = "/terms/data/" + term;
+                var url = "/api/1/terms/data/" + term;
                 d3.json(url, function (data) {
                     termChart.data = data['terms'];
                     termChart.viewing = term;

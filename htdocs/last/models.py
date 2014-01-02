@@ -7,7 +7,7 @@ from sqlalchemy.sql import func
 from sqlalchemy.dialects import postgresql
 from flask.ext.login import UserMixin
 
-from last import app
+from app import app
 import views
 
 db = SQLAlchemy(app)

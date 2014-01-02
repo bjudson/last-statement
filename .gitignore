@@ -7,4 +7,5 @@
 /htdocs/settings/dev.py
 /htdocs/settings/prod.py
 /htdocs/settings/stage.py
-/htdocs/static/info_img/*
+/htdocs/last/static/info_img/*
+/htdocs/task/app.py

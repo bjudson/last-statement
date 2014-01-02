@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block body %}
+    <nav><a href="/admin">Dashboard</a></nav>
+
+    <h1>Terms</h1>
+    <table class="term-table">
+        <tr>
+            <th>Title</th>
+            <th>Words</th>
+            <th>Chart</th>
+        </tr>
+        {% for t in terms %}
+            <tr>
+                <td>{{ t.title }}</td>
+                <td>{{ t.words }}</td>
+                <td class="charted-term">
+                    {% if t.chart %}
+                        <span class="true">✓</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

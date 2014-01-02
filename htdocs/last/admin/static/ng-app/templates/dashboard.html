@@ -1,0 +1,32 @@
+<h1>Dashboard</h1>
+
+<section class="scrape">
+    <p><a href="/admin/logout" class="btn">Logout</a></p>
+</section>
+
+<section>
+    <h2>Terms</h2>
+    <table class="term-table">
+        <tr>
+            <th>Title</th>
+            <th>Words</th>
+            <th>Chart</th>
+        </tr>
+        <tr ng-repeat="t in terms" ng-class-even="'even'">
+            <td ls-input="t.title"
+                ls-fld="title"
+                ls-enter="update(terms[$index].id, 'title', terms[$index].title)"
+                class="title-fld"></td>
+
+            <td ls-input="t.words"
+                ls-fld="words"
+                ls-enter="update(terms[$index].id, 'words', terms[$index].words)"
+                class="words-fld"></td>
+
+            <td class="charted-term"
+                ng-click="update(t.id, 'chart', t.chart)">
+                    <a href="javascript:void(0)">{{ t.chart | checkmark }}</a>
+            </td>
+        </tr>
+    </table>
+</section>

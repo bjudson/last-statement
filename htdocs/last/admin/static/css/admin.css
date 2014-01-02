@@ -1,0 +1,85 @@
+.btn {
+    padding: 3px 5px;
+    border: 1px solid #999;
+    border-radius: 3px;
+    box-shadow: 1px 1px 2px #ccc;
+    color: green;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background: rgba(255,255,255,.7);
+}
+
+.scrape-results {
+    display: none;
+}
+
+.scrape-results.show {
+    display: block;
+}
+
+.scrape-results-num, .scrape-results-clear {
+    font-size: .8em;
+    padding: 2px 4px;
+    background: rgba(100,100,100,.1);
+    border-radius: 2px;
+    margin-right: 3px;
+    color: #666;
+}
+
+.scrape-results-clear {
+    cursor: pointer;
+}
+
+.term-table {
+    background: #333;
+    border: 1px solid #333;
+    margin-bottom: 30px;
+    border-spacing: 0;
+}
+
+.term-table td {
+    padding: 3px 5px;
+    background: #fefeee;
+    border-bottom: 1px solid #deded4;
+}
+
+.term-table th {
+    padding: 3px 5px;
+    text-align: left;
+    color: #fefeee;
+}
+
+.term-table tr.even td {
+    background: #eeeee4;
+}
+
+.term-table a {
+    text-decoration: none;
+}
+
+.term-text-fld {
+    border: none;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    font-size: 1em;
+    font-family: 'Lato', sans-serif;
+}
+
+.term-text-fld:focus {
+    border-bottom: 1px solid #333;
+    outline: 0;
+}
+
+.title-fld {
+    width: 25%;
+}
+
+.words-fld {
+    width: 65%;
+}
+
+.title-fld input, .words-fld input {
+    width: 100%;
+}
