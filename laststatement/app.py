@@ -5,8 +5,8 @@ from flask import Flask
 app = Flask(__name__)
 
 # index.SETTINGS tells us which settings file to load for this env
-import index
-settings = __import__('settings.%s' % index.SETTINGS,
+from wsgi import SETTINGS
+settings = __import__('laststatement.settings.%s' % SETTINGS,
                       fromlist=['DEBUG', 'SECRET', 'SQLURI'])
 
 app.debug = settings.DEBUG

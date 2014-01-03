@@ -10,19 +10,15 @@ from flask import (Blueprint, request, json, jsonify)
 from flask.ext.login import login_required
 from sqlalchemy.sql import func
 
-from last.models import db, Offender, Term
-from last.admin.models import User
+from laststatement.models import db, Offender, Term
+from laststatement.admin.models import User
+from laststatement.helpers import date2text
 
 os.environ['TZ'] = 'America/Chicago'
 time.tzset()
 
 api = Blueprint('api', __name__)
 
-
-def date2text(date=None):
-    """ Convert date to human-friendly string
-    """
-    return date.strftime('%-d %B %Y')
 
 #
 # Data retreival / calculation functions
@@ -95,7 +91,6 @@ def statement_time_calc(offenders, type):
 
 
 @api.route('/', methods=['GET', 'OPTIONS'])
-@login_required
 def index():
     return jsonify(success='true')
 

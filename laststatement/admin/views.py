@@ -11,9 +11,9 @@ from flask import (Blueprint, request, render_template, url_for, flash,
 from flask.ext.login import (LoginManager, login_required, login_user,
                              logout_user, current_user)
 
-from last.app import app
-from models import db, User
-from last.forms import LoginForm
+from laststatement.app import app
+from .models import db, User
+from laststatement.forms import LoginForm
 
 os.environ['TZ'] = 'America/Chicago'
 time.tzset()

@@ -13,8 +13,8 @@ from bs4 import BeautifulSoup
 from flask.ext.script import Manager
 from sqlalchemy.orm import exc
 
-from app import app
-from last.models import db, Offender
+from laststatement.wsgi import application as app
+from laststatement.models import db, Offender
 
 DEATH_ROW_URLS = {
     'base': 'http://www.tdcj.state.tx.us/death_row/',

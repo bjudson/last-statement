@@ -3,6 +3,7 @@ Flask-Login==0.2.5
 Flask-SQLAlchemy==0.16
 Flask-WTF==0.8.4
 Flask-Script==0.6.6
+Flask-Testing==0.4
 Jinja2==2.7
 MarkupSafe==0.18
 SQLAlchemy==0.8.1

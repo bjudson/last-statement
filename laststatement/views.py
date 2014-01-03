@@ -11,6 +11,7 @@ from app import app
 from admin.views import admin
 from api.views import api
 from models import db, Offender
+from helpers import date2text
 
 os.environ['TZ'] = 'America/Chicago'
 time.tzset()
@@ -23,17 +24,12 @@ app.register_blueprint(api, url_prefix='/api/1')
 #
 
 
-def date2text(date=None):
-    """ Convert date to human-friendly string
-    """
-    return date.strftime('%-d %B %Y')
-
-
 def doy_leap(date=None):
-    """ Adjust day of year int to account for leap year. Not an ideal solution,
-        but we are simply subtracting 1 from tm_yday if tm_year is found to be
-        leap and tm_yday > 60 (Feb 29). Thus, Feb 29 is indistinguishable from
-        March 1, but every year has 365 days.
+    """ Adjust day of year int to account for leap year.
+
+        Not an ideal solution, but we are simply subtracting 1 from tm_yday if
+        tm_year is found to be leap and tm_yday > 60 (Feb 29). Thus, Feb 29 is
+        indistinguishable from March 1, but every year has 365 days.
     """
 
     doy = date.timetuple().tm_yday
@@ -54,7 +50,9 @@ def doy_leap(date=None):
 
 @app.context_processor
 def nav():
+    """ Makes function for building nav element available in all templates """
     def top_nav(buttons=('home', 'info', 'github')):
+        """ Returns HTML nav element with selected buttons """
         html = u'<nav class="menu">'
         for b in buttons:
             if b == 'home':
@@ -78,6 +76,7 @@ def nav():
 
 @app.context_processor
 def exec_total():
+    """ Makes total number of executions available in all templates """
     return dict(exec_total=db.session.query(Offender).count())
 
 
@@ -90,9 +89,7 @@ def exec_total():
 
 @app.route("/", methods=['GET', 'OPTIONS'])
 def index():
-    """ Show the last statement for someone executed on this date, or nearest
-        available date.
-    """
+    """ Show statement for someone executed on this date, or nearest date """
 
     day_of_year = doy_leap(datetime.now())
 
@@ -115,8 +112,7 @@ def index():
 
 @app.route("/execution/<num>", methods=['GET', 'OPTIONS'])
 def execution_num(num):
-    """ Find last statement by execution number
-    """
+    """ Find last statement by execution number """
 
     if num.isdigit():
         offender = db.session.query(Offender.first_name, Offender.last_name,
@@ -138,8 +134,7 @@ def execution_num(num):
 
 @app.route("/all", methods=['GET', 'OPTIONS'])
 def all():
-    """ Show all statements
-    """
+    """ Show all statements """
 
     offenders = db.session.query(Offender.first_name, Offender.last_name,
                                  Offender.age,
@@ -156,8 +151,7 @@ def all():
 
 @app.route('/all/text', methods=['GET', 'OPTIONS'])
 def all_text():
-    """ Save all statements to a single file, without names or HTML tags.
-    """
+    """ Save all statements to a single file, without names or HTML tags. """
 
     statements = db.session.query(Offender.last_statement).\
         filter(Offender.last_statement != None).\
@@ -175,8 +169,7 @@ def all_text():
 
 @app.route('/terms', methods=['GET', 'OPTIONS'])
 def terms_index():
-    """ The main terms page. Content is loaded by JS through API
-    """
+    """ The main terms page. Content is loaded by JS through API """
     return render_template('terms.html')
 
 

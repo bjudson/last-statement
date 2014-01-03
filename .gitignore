@@ -3,9 +3,9 @@
 
 /apache2
 /data/*
-/htdocs/index.py
-/htdocs/settings/dev.py
-/htdocs/settings/prod.py
-/htdocs/settings/stage.py
-/htdocs/last/static/info_img/*
-/htdocs/task/app.py
+/laststatement/wsgi.py
+/laststatement/settings/dev.py
+/laststatement/settings/prod.py
+/laststatement/settings/stage.py
+/laststatement/settings/test.py
+/laststatement/static/info_img/*

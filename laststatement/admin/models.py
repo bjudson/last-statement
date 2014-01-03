@@ -5,7 +5,7 @@ from datetime import datetime
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import UserMixin
 
-from last.app import app
+from laststatement.app import app
 
 db = SQLAlchemy(app)
 
