@@ -38,7 +38,8 @@ def get_colocations(term):
     """ Takes a single term, returns number of times all other terms occur in
         statements with it
     """
-    terms = db.session.query(Term).filter(Term.title != term.title, Term.chart)
+    terms = db.session.query(Term).filter(Term.title != term.title,
+                                          Term.chart == True)
     term_list = []
     for t in terms:
         viewing = ' | '.join(term.words)
