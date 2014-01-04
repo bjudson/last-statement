@@ -1,45 +1,13 @@
 # coding: utf-8
 
-import os
 import re
-import time
 from datetime import datetime
 
 from flask import (abort, render_template, Markup)
 
 from app import app
-from admin.views import admin
-from api.views import api
 from models import db, Offender
-from helpers import date2text
-
-os.environ['TZ'] = 'America/Chicago'
-time.tzset()
-
-app.register_blueprint(admin, url_prefix='/admin')
-app.register_blueprint(api, url_prefix='/api/1')
-
-#
-# Helper functions
-#
-
-
-def doy_leap(date=None):
-    """ Adjust day of year int to account for leap year.
-
-        Not an ideal solution, but we are simply subtracting 1 from tm_yday if
-        tm_year is found to be leap and tm_yday > 60 (Feb 29). Thus, Feb 29 is
-        indistinguishable from March 1, but every year has 365 days.
-    """
-
-    doy = date.timetuple().tm_yday
-    year = date.timetuple().tm_year
-
-    if year % 4 == 0:
-        if doy > 60:
-            doy -= 1
-
-    return doy
+from helpers import date2text, doy_leap
 
 
 ###############################################################################

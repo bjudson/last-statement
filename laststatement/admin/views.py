@@ -1,7 +1,5 @@
 # coding: utf-8
 
-import os
-import time
 from datetime import datetime
 
 from passlib.hash import bcrypt
@@ -14,9 +12,6 @@ from flask.ext.login import (LoginManager, login_required, login_user,
 from laststatement.app import app
 from .models import db, User
 from laststatement.forms import LoginForm
-
-os.environ['TZ'] = 'America/Chicago'
-time.tzset()
 
 admin = Blueprint('admin', __name__,
                   template_folder='templates',

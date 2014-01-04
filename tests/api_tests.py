@@ -1,15 +1,11 @@
 import unittest
 import json
 
-from laststatement.wsgi import application as app
+from tests import TestCase
 from laststatement.api import views
 
 
-class LastStatementApiTestCase(unittest.TestCase):
-
-    def setUp(self):
-        self.good_status = ('200 OK')
-        self.app = app.test_client()
+class LastStatementApiTestCase(TestCase):
 
     #
     # Test data functions
@@ -28,13 +24,9 @@ class LastStatementApiTestCase(unittest.TestCase):
             assert type(totals) == dict and len(totals) == 0
 
     def test_get_colocations(self):
-        terms = ['god', 'family']
-
-        for t in terms:
-            term_view = views.db.session.query(views.Term).\
-                filter(views.Term.title == t).first()
-            results = views.get_colocations(term_view)
-            assert type(results) == list and len(results) > 0
+        term_view = views.db.session.query(views.Term).first()
+        results = views.get_colocations(term_view)
+        assert type(results) == list and len(results) > 0
 
     def test_statement_time_calc(self):
         good_types = ['month', 'year']
@@ -51,25 +43,25 @@ class LastStatementApiTestCase(unittest.TestCase):
     #
 
     def test_index(self):
-        resp = self.app.get('/api/1/')
-        assert resp.status in self.good_status
+        resp = self.client.get('/api/1/')
+        self.assert200(resp)
 
     def test_executions_service(self):
-        resp = self.app.get('/api/1/executions/1')
-        assert resp.status in self.good_status
+        resp = self.client.get('/api/1/executions/1')
+        self.assert200(resp)
 
     def test_terms_service(self):
-        resp = self.app.get('/api/1/terms/5')
+        resp = self.client.get('/api/1/terms/5')
         assert resp.status == '302 FOUND'
         assert True
 
     def test_terms_data(self):
-        resp = self.app.get('/api/1/terms/data/')
-        assert resp.status in self.good_status
+        resp = self.client.get('/api/1/terms/data/')
+        self.assert200(resp)
 
     def test_terms_data_single(self):
-        resp = self.app.get('/api/1/terms/data/love')
-        assert resp.status in self.good_status
+        resp = self.client.get('/api/1/terms/data/love')
+        self.assert200(resp)
 
         data = json.loads(resp.data)
         assert len(data['months']) > 0

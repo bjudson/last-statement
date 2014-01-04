@@ -1,7 +1,5 @@
 # coding: utf-8
 
-import os
-import time
 from calendar import month_abbr
 
 from passlib.hash import bcrypt
@@ -13,9 +11,6 @@ from sqlalchemy.sql import func
 from laststatement.models import db, Offender, Term
 from laststatement.admin.models import User
 from laststatement.helpers import date2text
-
-os.environ['TZ'] = 'America/Chicago'
-time.tzset()
 
 api = Blueprint('api', __name__)
 

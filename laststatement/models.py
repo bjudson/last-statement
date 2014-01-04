@@ -8,9 +8,9 @@ from sqlalchemy.dialects import postgresql
 from flask.ext.login import UserMixin
 
 from app import app
-import views
-
 db = SQLAlchemy(app)
+
+from helpers import doy_leap
 
 
 class User(db.Model, UserMixin):
@@ -72,7 +72,7 @@ class Offender(db.Model):
         self.dob = dob
         self.execution_num = execution_num
         self.execution_date = execution_date
-        self.execution_day = views.doy_leap(execution_date)
+        self.execution_day = doy_leap(execution_date)
         self.offense_date = offense_date
         self.offense_county = offense_county
         self.received_date = received_date

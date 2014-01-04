@@ -1,14 +1,11 @@
-from datetime import datetime
 import unittest
+from datetime import datetime
 
-from laststatement.wsgi import application as app
+from tests import TestCase
 from laststatement import views
 
 
-class LastStatementTestCase(unittest.TestCase):
-
-    def setUp(self):
-        self.app = app.test_client()
+class LastStatementTestCase(TestCase):
 
     #
     # Test helper functions in views
@@ -44,33 +41,24 @@ class LastStatementTestCase(unittest.TestCase):
     #
 
     def test_index(self):
-        resp = self.app.get('/')
+        resp = self.client.get('/')
         assert 'The last statement of' in resp.data
 
     def test_execution_num(self):
-        resp = self.app.get('/execution/1')
+        resp = self.client.get('/execution/1')
         assert 'The last statement of' in resp.data
 
     def test_all(self):
-        resp = self.app.get('/all')
+        resp = self.client.get('/all')
         assert '500. Kimberly McCarthy' in resp.data
 
     def test_all_text(self):
-        resp = self.app.get('/all/text')
+        resp = self.client.get('/all/text')
         assert 'Love one another' in resp.data
 
     def test_terms_index(self):
-        resp = self.app.get('/terms')
+        resp = self.client.get('/terms')
         assert 'chart' in resp.data
-
-    #
-    # Test admin routes
-    #
-
-    # def test_scrape(self):
-    #     resp = self.app.get('/admin/scrape')
-    #     assert 'Offenders imported:' in resp.data
-
 
 if __name__ == '__main__':
     unittest.main()
