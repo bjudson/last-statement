@@ -1,5 +1,6 @@
 # coding: utf-8
 
+from datetime import datetime
 from calendar import month_abbr
 
 from passlib.hash import bcrypt
@@ -113,29 +114,70 @@ def user_add():
 
 
 @api.route('/executions/<id>', methods=['GET', 'OPTIONS'])
+@api.route('/executions', methods=['GET', 'OPTIONS'])
 def executions_service(id=None):
-    """ Query executions.
-        TODO - parameters:
-        * Date (day, range)
-        * Terms (freeform?)
-        * Race
-        * Gender
-        * Name
+    """ Query executions by ID or execution data.
     """
 
-    offenders = db.session.query(Offender).\
-        filter(Offender.last_statement != None).\
-        order_by(Offender.execution_num).\
-        all()
+    races = {'b': 'Black', 'h': 'Hispanic', 'w': 'White', 'o': 'Other'}
+
+    name = request.args.get('name', None)
+    race = request.args.get('race', None)
+    since = request.args.get('since', None)
+    until = request.args.get('until', None)
+    # age_gt = request.args.get('age', None)
+    # age_lt = request.args.get('age', None)
+    has_statement = request.args.get('has_statement', 't')
+    # inc_statement = request.args.get('inc_statement', 't')
+
+    q = db.session.query(Offender)
+    err = []
+
+    if name is not None:
+        last_name = name.split(',')[0]
+        q = q.filter(Offender.last_name.ilike(last_name + '%'))
+
+        try:
+            q = q.filter(Offender.first_name.ilike(name.split(',')[1]))
+        except IndexError:
+            pass
+
+    if race is not None:
+        try:
+            race_list = [races[r] for r in race.split(',')]
+            q = q.filter(Offender.race.in_(race_list))
+        except KeyError:
+            err.append('race parameter malformed; ignoring')
+
+    if since is not None:
+        try:
+            since = datetime.strptime(since, '%Y-%m-%d')
+            q = q.filter(Offender.execution_date >= since)
+        except ValueError:
+            err.append('since parameter malformed; ignoring')
+
+    if until is not None:
+        try:
+            since = datetime.strptime(until, '%Y-%m-%d')
+            q = q.filter(Offender.execution_date <= until)
+        except ValueError:
+            err.append('until parameter malformed; ignoring')
+
+    if has_statement == 't':
+        q = q.filter(Offender.last_statement != None)
+
+    count = q.count()
+    q = q.order_by(Offender.execution_num).all()
 
     corpus = [{'first_name': o.first_name,
                'last_name': o.last_name,
+               'race': o.race,
                'execution_date': o.execution_date.strftime('%Y-%m-%d'),
                'execution_num': o.execution_num,
                'statement': o.last_statement}
-              for o in offenders]
+              for o in q]
 
-    return jsonify(offenders=corpus)
+    return jsonify(count=count, errors=err, offenders=corpus)
 
 
 @api.route('/terms/<id>', methods=['GET', 'PUT', 'DELETE', 'OPTIONS'])
