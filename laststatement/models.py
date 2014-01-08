@@ -57,6 +57,7 @@ class Offender(db.Model):
     gender = db.Column(db.String(1))
     race = db.Column(db.String(20))
     last_statement = db.Column(db.Text)
+    teaser = db.Column(db.Text)
     info_url = db.Column(db.String(200))
     statement_url = db.Column(db.String(200))
 

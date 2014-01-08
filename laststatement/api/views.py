@@ -119,65 +119,104 @@ def executions_service(id=None):
     """ Query executions by ID or execution data.
     """
 
-    races = {'b': 'Black', 'h': 'Hispanic', 'w': 'White', 'o': 'Other'}
+    if request.method == 'GET':
+        races = {'b': 'Black', 'h': 'Hispanic', 'w': 'White', 'o': 'Other'}
 
-    name = request.args.get('name', None)
-    race = request.args.get('race', None)
-    since = request.args.get('since', None)
-    until = request.args.get('until', None)
-    # age_gt = request.args.get('age', None)
-    # age_lt = request.args.get('age', None)
-    has_statement = request.args.get('has_statement', 't')
-    # inc_statement = request.args.get('inc_statement', 't')
+        name = request.args.get('name', None)
+        race = request.args.get('race', None)
+        since = request.args.get('since', None)
+        until = request.args.get('until', None)
+        age_gt = request.args.get('age_gt', None)
+        age_lt = request.args.get('age_lt', None)
+        has_statement = request.args.get('has_statement', 't')
+        # inc_statement = request.args.get('inc_statement', 't')
 
-    q = db.session.query(Offender)
-    err = []
+        q = db.session.query(Offender)
+        err = []
 
-    if name is not None:
-        last_name = name.split(',')[0]
-        q = q.filter(Offender.last_name.ilike(last_name + '%'))
+        if id is None or id == 'all':
+            if name is not None:
+                last_name = name.split(',')[0]
+                q = q.filter(Offender.last_name.ilike(last_name + '%'))
+
+                try:
+                    q = q.filter(Offender.first_name.ilike(name.split(',')[1]))
+                except IndexError:
+                    pass
+
+            if race is not None:
+                try:
+                    race_list = [races[r] for r in race.split(',')]
+                    q = q.filter(Offender.race.in_(race_list))
+                except KeyError:
+                    err.append('race parameter malformed; ignoring')
+
+            if age_gt is not None:
+                if age_gt.isdigit():
+                    q = q.filter(Offender.age > age_gt)
+
+            if age_lt is not None:
+                if age_lt.isdigit():
+                    q = q.filter(Offender.age < age_lt)
+
+            if since is not None:
+                try:
+                    since = datetime.strptime(since, '%Y-%m-%d')
+                    q = q.filter(Offender.execution_date >= since)
+                except ValueError:
+                    err.append('since parameter malformed; ignoring')
+
+            if until is not None:
+                try:
+                    since = datetime.strptime(until, '%Y-%m-%d')
+                    q = q.filter(Offender.execution_date <= until)
+                except ValueError:
+                    err.append('until parameter malformed; ignoring')
+
+            if has_statement == 't':
+                q = q.filter(Offender.last_statement != None)
+
+        else:
+            q = q.filter(Offender.execution_num == id)
+
+        count = q.count()
+        q = q.order_by(Offender.execution_num).all()
+
+        corpus = [{'id': o.execution_num,
+                   'first_name': o.first_name,
+                   'last_name': o.last_name,
+                   'race': o.race,
+                   'age': o.age,
+                   'execution_date': o.execution_date.strftime('%Y-%m-%d'),
+                   'execution_num': o.execution_num,
+                   'statement': o.last_statement,
+                   'teaser': o.teaser}
+                  for o in q]
+
+        return jsonify(count=count, errors=err, offenders=corpus)
+
+
+@api.route('/executions/<id>', methods=['PUT', 'OPTIONS'])
+@login_required
+def executions_edit(id=None):
+    if request.method == 'PUT':
+        data = json.loads(request.data)
+
+        o = db.session.query(Offender).\
+            filter(Offender.execution_num == int(id)).first()
 
         try:
-            q = q.filter(Offender.first_name.ilike(name.split(',')[1]))
-        except IndexError:
+            o.teaser = data['teaser']
+        except KeyError:
             pass
 
-    if race is not None:
-        try:
-            race_list = [races[r] for r in race.split(',')]
-            q = q.filter(Offender.race.in_(race_list))
-        except KeyError:
-            err.append('race parameter malformed; ignoring')
+        db.session.commit()
 
-    if since is not None:
-        try:
-            since = datetime.strptime(since, '%Y-%m-%d')
-            q = q.filter(Offender.execution_date >= since)
-        except ValueError:
-            err.append('since parameter malformed; ignoring')
-
-    if until is not None:
-        try:
-            since = datetime.strptime(until, '%Y-%m-%d')
-            q = q.filter(Offender.execution_date <= until)
-        except ValueError:
-            err.append('until parameter malformed; ignoring')
-
-    if has_statement == 't':
-        q = q.filter(Offender.last_statement != None)
-
-    count = q.count()
-    q = q.order_by(Offender.execution_num).all()
-
-    corpus = [{'first_name': o.first_name,
-               'last_name': o.last_name,
-               'race': o.race,
-               'execution_date': o.execution_date.strftime('%Y-%m-%d'),
-               'execution_num': o.execution_num,
-               'statement': o.last_statement}
-              for o in q]
-
-    return jsonify(count=count, errors=err, offenders=corpus)
+        return jsonify(first_name=o.first_name, last_name=o.last_name,
+                       race=o.race, age=o.age, execution_num=o.execution_num,
+                       execution_date=o.execution_date.strftime('%Y-%m-%d'),
+                       statement=o.last_statement, id=o.execution_num,
+                       teaser=o.teaser)
 
 
 @api.route('/terms/<id>', methods=['GET', 'PUT', 'DELETE', 'OPTIONS'])
@@ -235,13 +274,6 @@ def terms_service(id=None):
             pass
 
         db.session.commit()
-
-        term_obj = {
-            'id': term.id,
-            'title': term.title,
-            'chart': term.chart,
-            'words': term.words,
-        }
 
         return jsonify(id=term.id, title=term.title, chart=term.chart,
                        words=', '.join(term.words))
