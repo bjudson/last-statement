@@ -1,3 +1,7 @@
+.wrap {
+    max-width: 60em;
+}
+
 .btn {
     padding: 3px 5px;
     border: 1px solid #999;
@@ -32,30 +36,36 @@
     cursor: pointer;
 }
 
-.term-table {
+.ls-table {
     background: #333;
     border: 1px solid #333;
     margin-bottom: 30px;
     border-spacing: 0;
+    width: 100%;
 }
 
-.term-table td {
+.ls-table td {
     padding: 3px 5px;
     background: #fefeee;
     border-bottom: 1px solid #deded4;
+    vertical-align: top;
 }
 
-.term-table th {
+.ls-table td p:first-child {
+    margin-top: 0;
+}
+
+.ls-table th {
     padding: 3px 5px;
     text-align: left;
     color: #fefeee;
 }
 
-.term-table tr.even td {
+.ls-table tr.even td {
     background: #eeeee4;
 }
 
-.term-table a {
+.ls-table a {
     text-decoration: none;
 }
 
@@ -82,4 +92,31 @@
 
 .title-fld input, .words-fld input {
     width: 100%;
+}
+
+.teaser-label {
+    font-size: .9em;
+    font-weight: normal;
+
+    margin-bottom: 3px;
+}
+
+.teaser-fld {
+    background: rgba(50,50,50,.1);
+    padding: 1px 4px;
+}
+
+.teaser-fld input {
+    width: 99%;
+    color: green;
+}
+
+.data-cell {
+    font-size: .8em;
+    color: #666;
+}
+
+.data-cell p {
+    margin-bottom: 5px;
+    margin-right: 15px;
 }

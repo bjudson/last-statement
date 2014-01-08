@@ -40,6 +40,31 @@ lastAdminControllers.controller('DashCtrl', ['$scope', 'Term', '$http',
         };
     }]);
 
-lastAdminControllers.controller('TermCtrl', function($scope) {
-    $scope.msg = 'Terms for everyone';
-});
+lastAdminControllers.controller('OffenderCtrl', ['$scope', 'Offender', '$http',
+    function($scope, Offender, $http) {
+        Offender.query({},
+            function(data){
+                $scope.offenders = data.offenders
+            },
+            function(data){
+                console.log('Unable to query offenders');
+            });
+        $scope.orderProp = 'execution_num';
+
+        $scope.update = function(id, fld, val){
+            var newValue = {};
+                newValue[fld] = val;
+
+            Offender.update({executionId: id}, newValue,
+                function(data){
+                    for(var i = 0; i < $scope.offenders.length; i++){
+                        if($scope.offenders[i].id == data.id){
+                            $scope.offenders[i][fld] = data[fld];
+                            break;
+                        }
+                    }
+                },
+                function(data){ console.log('failure') });
+
+        };
+    }]);

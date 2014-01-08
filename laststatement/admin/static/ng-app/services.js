@@ -12,3 +12,12 @@ lastAdminServices.factory('Term', ['$resource',
       update: {method:'PUT'}
     });
   }]);
+
+lastAdminServices.factory('Offender', ['$resource',
+  function($resource){
+    return $resource('/api/1/executions/:executionId', {}, {
+      query: {method:'GET', params: {executionId: 'all'}},
+      save: {method:'POST'},
+      update: {method:'PUT'}
+    });
+  }]);

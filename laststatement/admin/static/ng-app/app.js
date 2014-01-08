@@ -4,6 +4,7 @@
 
 var lastAdmin = angular.module('lastAdmin', [
   'ngRoute',
+  'ngSanitize',
   'lastAdminControllers',
   'lastAdminServices',
   'lastAdminDirectives',
@@ -17,9 +18,9 @@ lastAdmin.config(['$routeProvider',
         templateUrl: 'static/ng-app/templates/dashboard.html',
         controller: 'DashCtrl'
       }).
-      when('/terms', {
-        templateUrl: 'static/ng-app/templates/terms.html',
-        controller: 'TermCtrl'
+      when('/offenders', {
+        templateUrl: 'static/ng-app/templates/offenders.html',
+        controller: 'OffenderCtrl'
       }).
       otherwise({
         redirectTo: '/dashboard'
