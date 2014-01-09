@@ -1,9 +1,14 @@
+.main-nav {
+    margin-top: 15px;
+}
+
 .wrap {
     max-width: 60em;
 }
 
 .btn {
     padding: 3px 5px;
+    margin-right: 5px;
     border: 1px solid #999;
     border-radius: 3px;
     box-shadow: 1px 1px 2px #ccc;
@@ -104,6 +109,7 @@
 .teaser-fld {
     background: rgba(50,50,50,.1);
     padding: 1px 4px;
+    margin-bottom: 5px;
 }
 
 .teaser-fld input {
@@ -114,6 +120,7 @@
 .data-cell {
     font-size: .8em;
     color: #666;
+    border-right: 1px solid #ddd;
 }
 
 .data-cell p {
