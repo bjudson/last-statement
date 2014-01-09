@@ -18,9 +18,9 @@ lastAdmin.config(['$routeProvider',
         templateUrl: 'static/ng-app/templates/dashboard.html',
         controller: 'DashCtrl'
       }).
-      when('/offenders', {
-        templateUrl: 'static/ng-app/templates/offenders.html',
-        controller: 'OffenderCtrl'
+      when('/executions', {
+        templateUrl: 'static/ng-app/templates/executions.html',
+        controller: 'ExecutionCtrl'
       }).
       otherwise({
         redirectTo: '/dashboard'

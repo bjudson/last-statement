@@ -1,0 +1,28 @@
+<ng-include src="'static/ng-app/templates/main-nav.html'"></ng-include>
+
+<h1>Executions</h1>
+
+<section>
+    <table class="executions-table ls-table">
+        <tr>
+            <th>Data</th>
+            <th>Statement</th>
+        </tr>
+        <tr ng-repeat="e in executions" ng-class-even="'even'">
+            <td class="data-cell"><p>#{{ e.execution_num }}</p>
+                <p>{{ e.first_name }} {{ e.last_name }}</p>
+                <p>{{ e.execution_date }}</p>
+                <p>{{ e.age }} yrs old</p>
+                <p>{{ e.race }}</p>
+            </td>
+            <td class="statement-cell">
+                <div ng-bind-html="e.statement"></div>
+                <h2 class="teaser-label">Teaser ({{ e.teaser.length }})</h2>
+                <div ls-input="e.teaser"
+                     ls-fld="teaser"
+                     ls-enter="update(executions[$index].id, 'teaser', executions[$index].teaser)"
+                     class="teaser-fld"></div>
+            </td>
+        </tr>
+    </table>
+</section>

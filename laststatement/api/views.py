@@ -193,7 +193,7 @@ def executions_service(id=None):
                    'teaser': o.teaser}
                   for o in q]
 
-        return jsonify(count=count, errors=err, offenders=corpus)
+        return jsonify(count=count, errors=err, executions=corpus)
 
 
 @api.route('/executions/<id>', methods=['PUT', 'OPTIONS'])

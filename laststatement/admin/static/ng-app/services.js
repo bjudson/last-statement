@@ -13,7 +13,7 @@ lastAdminServices.factory('Term', ['$resource',
     });
   }]);
 
-lastAdminServices.factory('Offender', ['$resource',
+lastAdminServices.factory('Execution', ['$resource',
   function($resource){
     return $resource('/api/1/executions/:executionId', {}, {
       query: {method:'GET', params: {executionId: 'all'}},

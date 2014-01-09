@@ -40,14 +40,14 @@ lastAdminControllers.controller('DashCtrl', ['$scope', 'Term', '$http',
         };
     }]);
 
-lastAdminControllers.controller('OffenderCtrl', ['$scope', 'Offender', '$http',
-    function($scope, Offender, $http) {
-        Offender.query({},
+lastAdminControllers.controller('ExecutionCtrl', ['$scope', 'Execution', '$http',
+    function($scope, Execution, $http) {
+        Execution.query({},
             function(data){
-                $scope.offenders = data.offenders
+                $scope.executions = data.executions
             },
             function(data){
-                console.log('Unable to query offenders');
+                console.log('Unable to query executions');
             });
         $scope.orderProp = 'execution_num';
 
@@ -55,11 +55,11 @@ lastAdminControllers.controller('OffenderCtrl', ['$scope', 'Offender', '$http',
             var newValue = {};
                 newValue[fld] = val;
 
-            Offender.update({executionId: id}, newValue,
+            Execution.update({executionId: id}, newValue,
                 function(data){
-                    for(var i = 0; i < $scope.offenders.length; i++){
-                        if($scope.offenders[i].id == data.id){
-                            $scope.offenders[i][fld] = data[fld];
+                    for(var i = 0; i < $scope.executions.length; i++){
+                        if($scope.executions[i].id == data.id){
+                            $scope.executions[i][fld] = data[fld];
                             break;
                         }
                     }
