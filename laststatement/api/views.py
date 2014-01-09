@@ -283,7 +283,7 @@ def terms_service(id=None):
 
 @api.route('/terms/data/', methods=['GET', 'OPTIONS'])
 def terms_data_all():
-    terms = db.session.query(Term).filter(Term.chart).all()
+    terms = db.session.query(Term).filter(Term.chart == True).all()
     term_list = []
 
     for t in terms:
