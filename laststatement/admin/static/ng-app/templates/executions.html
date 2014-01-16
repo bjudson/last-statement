@@ -22,6 +22,15 @@
                      ls-fld="teaser"
                      ls-enter="update(executions[$index].id, 'teaser', executions[$index].teaser)"
                      class="teaser-fld"></div>
+
+                <h2 class="teaser-label">Sentiments</h2>
+                <div class="sentiment-selector">
+                    <span ng-repeat="s in sentiments"
+                          ng-class="{selected: e.sentiments.indexOf(s.id) > -1}"
+                          ng-click="update(e.id, 'sentiments', s.id, (e.sentiments.indexOf(s.id) == -1))" >
+                          {{ s.title }}
+                    </span>
+                </div>
             </td>
         </tr>
     </table>

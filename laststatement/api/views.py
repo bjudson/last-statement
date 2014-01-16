@@ -5,7 +5,7 @@ from calendar import month_abbr
 
 from passlib.hash import bcrypt
 
-from flask import (Blueprint, request, json, jsonify)
+from flask import (Blueprint, current_app, request, json, jsonify)
 from flask.ext.login import login_required
 from sqlalchemy.sql import func
 
@@ -192,7 +192,8 @@ def executions_service(id=None):
                    'execution_date': o.execution_date.strftime('%Y-%m-%d'),
                    'execution_num': o.execution_num,
                    'statement': o.last_statement,
-                   'teaser': o.teaser}
+                   'teaser': o.teaser,
+                   'sentiments': [s.id for s in o.sentiments]}
                   for o in q]
 
         return jsonify(count=count, errors=err, executions=corpus)
@@ -215,13 +216,30 @@ def executions_edit(id=None):
         except KeyError:
             pass
 
+        try:
+            sentiment_id = int(data['sentiments'])
+            add = data['add']
+        except KeyError:
+            pass
+        else:
+            sentiment = db.session.query(Sentiment).get(sentiment_id)
+
+            if add is True:
+                o.sentiments.append(sentiment)
+                current_app.logger.debug(o.sentiments)
+            elif add is False:
+                o.sentiments.remove(sentiment)
+                current_app.logger.debug(o.sentiments)
+
         db.session.commit()
+
+        sentiments = [s.id for s in o.sentiments]
 
         return jsonify(first_name=o.first_name, last_name=o.last_name,
                        race=o.race, age=o.age, execution_num=o.execution_num,
                        execution_date=o.execution_date.strftime('%Y-%m-%d'),
                        statement=o.last_statement, id=o.execution_num,
-                       teaser=o.teaser)
+                       teaser=o.teaser, sentiments=sentiments)
 
 
 @api.route('/terms/<id>', methods=['GET', 'PUT', 'DELETE', 'OPTIONS'])

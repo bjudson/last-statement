@@ -127,3 +127,22 @@
     margin-bottom: 5px;
     margin-right: 15px;
 }
+
+.sentiment-selector {
+    margin-bottom: 5px;
+}
+
+.sentiment-selector span {
+    display: inline-block;
+    font-size: .8em;
+    background: rgba(50,50,50,.1);
+    padding: 1px 3px;
+    border-radius: 2px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.sentiment-selector span.selected {
+    color: #efefef;
+    background: rgba(50,50,50,.8);
+}

@@ -64,8 +64,8 @@ lastAdminControllers.controller('DashCtrl', ['$scope', 'Term', 'Sentiment', '$ht
         };
     }]);
 
-lastAdminControllers.controller('ExecutionCtrl', ['$scope', 'Execution', '$http',
-    function($scope, Execution, $http) {
+lastAdminControllers.controller('ExecutionCtrl', ['$scope', 'Execution', 'Sentiment', '$http',
+    function($scope, Execution, Sentiment, $http) {
         Execution.query({},
             function(data){
                 $scope.executions = data.executions
@@ -75,9 +75,23 @@ lastAdminControllers.controller('ExecutionCtrl', ['$scope', 'Execution', '$http'
             });
         $scope.orderProp = 'execution_num';
 
-        $scope.update = function(id, fld, val){
+        Sentiment.query({},
+            function(data){
+                $scope.sentiments = data.sentiments
+            },
+            function(data){
+                console.log('Unable to query executions');
+            });
+
+        $scope.update = function(id, fld, val, add){
             var newValue = {};
-                newValue[fld] = val;
+
+            newValue[fld] = val;
+
+            // add is used for sentiments. if true add to execution, if false remove
+            if(typeof add !== 'undefined'){
+               newValue['add'] = add;
+            }
 
             Execution.update({executionId: id}, newValue,
                 function(data){
