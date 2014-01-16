@@ -9,7 +9,7 @@ from flask import (Blueprint, request, json, jsonify)
 from flask.ext.login import login_required
 from sqlalchemy.sql import func
 
-from laststatement.models import db, Offender, Term
+from laststatement.models import db, Offender, Term, Sentiment
 from laststatement.admin.models import User
 from laststatement.helpers import date2text
 
@@ -95,6 +95,8 @@ def index():
 @api.route('/user', methods=['GET', 'POST', 'OPTIONS'])
 @login_required
 def user_add():
+    """ Create admin user """
+
     if request.method == 'POST':
         email = request.form.get('email')
         existing = db.session.query(User).filter(User.email == email).first()
@@ -199,6 +201,9 @@ def executions_service(id=None):
 @api.route('/executions/<id>', methods=['PUT', 'OPTIONS'])
 @login_required
 def executions_edit(id=None):
+    """ Allows editing of offender records
+        At this point, this is limited to adding / updating a teaser
+    """
     if request.method == 'PUT':
         data = json.loads(request.data)
 
@@ -222,6 +227,10 @@ def executions_edit(id=None):
 @api.route('/terms/<id>', methods=['GET', 'PUT', 'DELETE', 'OPTIONS'])
 @login_required
 def terms_service(id=None):
+    """ Used for editable table in admin.
+        GET: return record(s) for existing terms
+        PUT: update fields on existing terms
+    """
     if request.method == 'GET':
         if id == 'all':
             terms = Term.query.order_by('title').all()
@@ -283,6 +292,10 @@ def terms_service(id=None):
 
 @api.route('/terms/data/', methods=['GET', 'OPTIONS'])
 def terms_data_all():
+    """ Looks up data for all existing terms.
+        Returns list of terms containing title and raw count of statements
+        containing term.
+    """
     terms = db.session.query(Term).filter(Term.chart == True).all()
     term_list = []
 
@@ -299,7 +312,8 @@ def terms_data_all():
 
 @api.route('/terms/data/<term>', methods=['GET', 'OPTIONS'])
 def terms_data_single(term):
-    """ Looks up data for a given term. Should return:
+    """ Looks up data for a given term.
+        Should return:
         * Term record (title, words used in search)
         * All other terms, sorted by # of times they appear with given term
         * All years with percent of statements containing given term
@@ -338,5 +352,53 @@ def terms_data_single(term):
 
         return jsonify(success='true', viewing=term_view, terms=colocations,
                        years=years, months=months, statements=statements)
+    else:
+        return jsonify(success='false')
+
+
+@api.route('/sentiments/<id>', methods=['GET', 'PUT', 'DELETE', 'OPTIONS'])
+@login_required
+def sentiments_service(id=None):
+    """ Used for editable table in admin.
+        GET: return record(s) for existing sentiments
+        PUT: update fields on existing sentiments
+    """
+    if request.method == 'GET':
+        if id == 'all':
+            sentiments = Sentiment.query.order_by('title').all()
+            stmt_list = [
+                {'id': s.id,
+                 'title': s.title
+                 } for s in sentiments]
+
+            return jsonify(sentiments=stmt_list)
+        elif id.isdigit():
+            sentiment = Sentiment.query.filter(Sentiment.id == int(id)).first()
+            stmt_obj = {
+                'id': sentiment.id,
+                'title': sentiment.title
+            }
+
+            return jsonify(sentiment=stmt_obj)
+        else:
+            return jsonify(success='false')
+
+    elif request.method == 'POST':
+        # TODO: Implement POST
+        return jsonify(error='Method not implemented', success='false')
+
+    elif request.method == 'PUT':
+        data = json.loads(request.data)
+
+        sentiment = db.session.query(Sentiment).get(int(id))
+
+        try:
+            sentiment.title = data['title']
+        except KeyError:
+            pass
+
+        db.session.commit()
+
+        return jsonify(id=sentiment.id, title=sentiment.title)
     else:
         return jsonify(success='false')

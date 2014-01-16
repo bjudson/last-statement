@@ -13,6 +13,18 @@ db = SQLAlchemy(app)
 from helpers import doy_leap
 
 
+Offender_Term = db.Table('offenders_terms', db.Model.metadata,
+    db.Column('offender_id', db.Integer, db.ForeignKey('offenders.id')),
+    db.Column('term_id', db.Integer, db.ForeignKey('terms.id'))
+)
+
+
+Offender_Sentiment = db.Table('offenders_sentiments', db.Model.metadata,
+    db.Column('offender_id', db.Integer, db.ForeignKey('offenders.id')),
+    db.Column('sentiment_id', db.Integer, db.ForeignKey('sentiments.id'))
+)
+
+
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -90,7 +102,22 @@ class Term(db.Model):
     title = db.Column(db.String(50))
     words = db.Column(postgresql.ARRAY(db.String(50)))
     chart = db.Column(db.Boolean)
+    offenders = db.relationship("Offender",
+                                secondary=Offender_Term,
+                                backref='terms')
 
     def __init__(self, title=None, words=None):
         self.title = title
         self.words = words
+
+
+class Sentiment(db.Model):
+    __tablename__ = 'sentiments'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(50))
+    offenders = db.relationship("Offender",
+                                secondary=Offender_Sentiment,
+                                backref='sentiments')
+
+    def __init__(self, title=None):
+        self.title = title
