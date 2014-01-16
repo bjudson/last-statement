@@ -4,8 +4,8 @@
 
 var lastAdminControllers = angular.module('lastAdminControllers', []);
 
-lastAdminControllers.controller('DashCtrl', ['$scope', 'Term', '$http',
-    function($scope, Term, $http) {
+lastAdminControllers.controller('DashCtrl', ['$scope', 'Term', 'Sentiment', '$http',
+    function($scope, Term, Sentiment, $http) {
         Term.query({},
             function(data){
                 $scope.terms = data.terms
@@ -13,11 +13,33 @@ lastAdminControllers.controller('DashCtrl', ['$scope', 'Term', '$http',
             function(data){
                 console.log('Unable to query terms');
             });
+
+        Sentiment.query({},
+            function(data){
+                $scope.sentiments = data.sentiments
+            },
+            function(data){
+                console.log('Unable to query sentiments');
+            });
+
         $scope.orderProp = 'title';
 
-        $scope.update = function(id, fld, val){
-            var newValue = {};
-                newValue[fld] = val;
+        $scope.update = function(model, id, fld, val){
+            var newValue = {},
+                models = {
+                    'Term': {
+                        'service': Term,
+                        'scope': $scope.terms,
+                        'key': {termId: id}
+                    },
+                    'Sentiment': {
+                        'service': Sentiment,
+                        'scope': $scope.sentiments,
+                        'key': {sentimentId: id}
+                    }
+                };
+
+            newValue[fld] = val;
 
             if(fld === 'chart'){
                 if(val == true){
@@ -27,11 +49,13 @@ lastAdminControllers.controller('DashCtrl', ['$scope', 'Term', '$http',
                 }
             }
 
-            Term.update({termId: id}, newValue,
+            var m = models[model];
+
+            m.service.update(m.key, newValue,
                 function(data){
-                    for(var i = 0; i < $scope.terms.length; i++){
-                        if($scope.terms[i].id == data.id){
-                            $scope.terms[i][fld] = data[fld];
+                    for(var i = 0; i < m.scope.length; i++){
+                        if(m.scope[i].id == data.id){
+                            m.scope[i][fld] = data[fld];
                             break;
                         }
                     }

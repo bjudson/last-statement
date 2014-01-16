@@ -13,18 +13,33 @@
         <tr ng-repeat="t in terms" ng-class-even="'even'">
             <td ls-input="t.title"
                 ls-fld="title"
-                ls-enter="update(terms[$index].id, 'title', terms[$index].title)"
+                ls-enter="update('Term', terms[$index].id, 'title', terms[$index].title)"
                 class="title-fld"></td>
 
             <td ls-input="t.words"
                 ls-fld="words"
-                ls-enter="update(terms[$index].id, 'words', terms[$index].words)"
+                ls-enter="update('Term', terms[$index].id, 'words', terms[$index].words)"
                 class="words-fld"></td>
 
             <td class="charted-term"
-                ng-click="update(t.id, 'chart', t.chart)">
+                ng-click="update('Term', t.id, 'chart', t.chart)">
                     <a href="javascript:void(0)">{{ t.chart | checkmark }}</a>
             </td>
+        </tr>
+    </table>
+</section>
+
+<section>
+    <h2>Sentiments</h2>
+    <table class="ls-table sentiment-table">
+        <tr>
+            <th>Title</th>
+        </tr>
+        <tr ng-repeat="s in sentiments" ng-class-even="'even'">
+            <td ls-input="s.title"
+                ls-fld="title"
+                ls-enter="update('Sentiment', sentiments[$index].id, 'title', sentiments[$index].title)"
+                class="title-fld"></td>
         </tr>
     </table>
 </section>
