@@ -146,3 +146,19 @@
     color: #efefef;
     background: rgba(50,50,50,.8);
 }
+
+.new-term-input {
+    padding: 2px 4px;
+    font-size: 1.1em;
+    border: 1px solid #666;
+    background: #fff;
+}
+
+.new-term-btn {
+    padding: 2px 8px;
+    font-size: 1.1em;
+    border: 1px solid #666;
+    background: #444;
+    color: #fff;
+    border-radius: 2px;
+}

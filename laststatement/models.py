@@ -106,9 +106,10 @@ class Term(db.Model):
                                 secondary=Offender_Term,
                                 backref='terms')
 
-    def __init__(self, title=None, words=None):
+    def __init__(self, title=None, words=None, chart=False):
         self.title = title
         self.words = words
+        self.chart = chart
 
 
 class Sentiment(db.Model):

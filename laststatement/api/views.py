@@ -243,6 +243,7 @@ def executions_edit(id=None):
 
 
 @api.route('/terms/<id>', methods=['GET', 'PUT', 'DELETE', 'OPTIONS'])
+@api.route('/terms', methods=['POST', 'OPTIONS'])
 @login_required
 def terms_service(id=None):
     """ Used for editable table in admin.
@@ -274,8 +275,20 @@ def terms_service(id=None):
             return jsonify(success='false')
 
     elif request.method == 'POST':
-        # TODO: Implement POST
-        return jsonify(error='Method not implemented', success='false')
+        data = json.loads(request.data)
+        term = Term(data['title'], [data['words']], data['chart'])
+
+        db.session.add(term)
+        db.session.commit()
+
+        term_obj = {
+            'id': term.id,
+            'title': term.title,
+            'words': term.words,
+            'chart': term.chart
+        }
+
+        return jsonify(term=term_obj, success='true')
 
     elif request.method == 'PUT':
         data = json.loads(request.data)
@@ -375,6 +388,7 @@ def terms_data_single(term):
 
 
 @api.route('/sentiments/<id>', methods=['GET', 'PUT', 'DELETE', 'OPTIONS'])
+@api.route('/sentiments', methods=['POST', 'OPTIONS'])
 @login_required
 def sentiments_service(id=None):
     """ Used for editable table in admin.
@@ -402,8 +416,21 @@ def sentiments_service(id=None):
             return jsonify(success='false')
 
     elif request.method == 'POST':
-        # TODO: Implement POST
-        return jsonify(error='Method not implemented', success='false')
+        data = json.loads(request.data)
+        stmt = Sentiment(data['title'])
+
+        try:
+            db.session.add(stmt)
+            db.session.commit()
+
+            stmt_obj = {
+                'id': stmt.id,
+                'title': stmt.title,
+            }
+        except:
+            return jsonify(success='false')
+
+        return jsonify(sentiment=stmt_obj, success='true')
 
     elif request.method == 'PUT':
         data = json.loads(request.data)

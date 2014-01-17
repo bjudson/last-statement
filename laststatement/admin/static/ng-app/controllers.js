@@ -24,6 +24,36 @@ lastAdminControllers.controller('DashCtrl', ['$scope', 'Term', 'Sentiment', '$ht
 
         $scope.orderProp = 'title';
 
+        $scope.createTerm = function(){
+            if($scope.newTermTitle != ''){
+                Term.save({
+                    title: $scope.newTermTitle,
+                    words: $scope.newTermTitle,
+                    chart: false
+                },
+                function(data){
+                    $scope.terms.push(data.term);
+                },
+                function(data){
+                    console.log('Unable to create term');
+                });
+            }
+        }
+
+        $scope.createSentiment = function(){
+            if($scope.newSentimentTitle != ''){
+                Sentiment.save({
+                    title: $scope.newSentimentTitle
+                },
+                function(data){
+                    $scope.sentiments.push(data.sentiment);
+                },
+                function(data){
+                    console.log('Unable to create sentiment');
+                });
+            }
+        }
+
         $scope.update = function(model, id, fld, val){
             var newValue = {},
                 models = {
