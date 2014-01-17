@@ -274,6 +274,18 @@ def terms_service(id=None):
         else:
             return jsonify(success='false')
 
+    elif request.method == 'DELETE':
+        if id.isdigit():
+            try:
+                term = db.session.query(Term).get(int(id))
+                del_id = term.id
+                db.session.delete(term)
+                db.session.commit()
+            except:
+                return jsonify(success='false')
+            else:
+                return jsonify(id=del_id, success='true')
+
     elif request.method == 'POST':
         data = json.loads(request.data)
         term = Term(data['title'], [data['words']], data['chart'])
@@ -400,7 +412,8 @@ def sentiments_service(id=None):
             sentiments = Sentiment.query.order_by('title').all()
             stmt_list = [
                 {'id': s.id,
-                 'title': s.title
+                 'title': s.title,
+                 'execution_count': len(s.offenders)
                  } for s in sentiments]
 
             return jsonify(sentiments=stmt_list)
@@ -415,22 +428,34 @@ def sentiments_service(id=None):
         else:
             return jsonify(success='false')
 
+    elif request.method == 'DELETE':
+        if id.isdigit():
+            try:
+                sntmt = db.session.query(Sentiment).get(int(id))
+                del_id = sntmt.id
+                db.session.delete(sntmt)
+                db.session.commit()
+            except:
+                return jsonify(success='false')
+            else:
+                return jsonify(id=del_id, success='true')
+
     elif request.method == 'POST':
         data = json.loads(request.data)
-        stmt = Sentiment(data['title'])
+        sntmt = Sentiment(data['title'])
 
         try:
-            db.session.add(stmt)
+            db.session.add(sntmt)
             db.session.commit()
 
-            stmt_obj = {
-                'id': stmt.id,
-                'title': stmt.title,
+            sntmt_obj = {
+                'id': sntmt.id,
+                'title': sntmt.title,
             }
         except:
             return jsonify(success='false')
 
-        return jsonify(sentiment=stmt_obj, success='true')
+        return jsonify(sentiment=sntmt_obj, success='true')
 
     elif request.method == 'PUT':
         data = json.loads(request.data)

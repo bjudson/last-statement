@@ -6,11 +6,15 @@
     <h2>Terms</h2>
     <table class="ls-table term-table">
         <tr>
+            <th></th>
             <th>Title</th>
             <th>Words</th>
             <th>Chart</th>
         </tr>
         <tr ng-repeat="t in terms" ng-class-even="'even'">
+            <td ng-click="delete('Term', t.id)"
+                class="delete-btn"><button>×</button></td>
+
             <td ls-input="t.title"
                 ls-fld="title"
                 ls-enter="update('Term', terms[$index].id, 'title', terms[$index].title)"
@@ -37,9 +41,14 @@
     <h2>Sentiments</h2>
     <table class="ls-table sentiment-table">
         <tr>
+            <th></th>
+            <th>Count</th>
             <th>Title</th>
         </tr>
         <tr ng-repeat="s in sentiments" ng-class-even="'even'">
+            <td ng-click="delete('Sentiment', s.id)"
+                class="delete-btn"><button>×</button></td>
+            <td class="count-col">{{ s.execution_count }}</td>
             <td ls-input="s.title"
                 ls-fld="title"
                 ls-enter="update('Sentiment', sentiments[$index].id, 'title', sentiments[$index].title)"

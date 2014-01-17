@@ -18,7 +18,8 @@ lastAdminServices.factory('Term', ['$resource',
     return $resource('/api/1/terms/:termId', {}, {
       query: {method:'GET', params: {termId: 'all'}},
       save: {method:'POST'},
-      update: {method:'PUT'}
+      update: {method:'PUT'},
+      delete: {method: 'DELETE'}
     });
   }]);
 
@@ -27,6 +28,7 @@ lastAdminServices.factory('Sentiment', ['$resource',
     return $resource('/api/1/sentiments/:sentimentId', {}, {
       query: {method:'GET', params: {sentimentId: 'all'}},
       save: {method:'POST'},
-      update: {method:'PUT'}
+      update: {method:'PUT'},
+      delete: {method: 'DELETE'}
     });
   }]);

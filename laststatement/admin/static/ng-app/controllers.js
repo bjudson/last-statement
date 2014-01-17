@@ -24,6 +24,23 @@ lastAdminControllers.controller('DashCtrl', ['$scope', 'Term', 'Sentiment', '$ht
 
         $scope.orderProp = 'title';
 
+        function getModel(name, id){
+            var models = {
+                'Term': {
+                    'service': Term,
+                    'scope': $scope.terms,
+                    'pk': {termId: id}
+                },
+                'Sentiment': {
+                    'service': Sentiment,
+                    'scope': $scope.sentiments,
+                    'pk': {sentimentId: id}
+                }
+            };
+
+            return models[name];
+        }
+
         $scope.createTerm = function(){
             if($scope.newTermTitle != ''){
                 Term.save({
@@ -38,7 +55,7 @@ lastAdminControllers.controller('DashCtrl', ['$scope', 'Term', 'Sentiment', '$ht
                     console.log('Unable to create term');
                 });
             }
-        }
+        };
 
         $scope.createSentiment = function(){
             if($scope.newSentimentTitle != ''){
@@ -52,22 +69,28 @@ lastAdminControllers.controller('DashCtrl', ['$scope', 'Term', 'Sentiment', '$ht
                     console.log('Unable to create sentiment');
                 });
             }
-        }
+        };
+
+        $scope.delete = function(model, id){
+            var m = getModel(model, id);
+
+            if(confirm('Are you sure you want to delete this forever?')){
+                m.service.delete(m.pk,
+                    function(data){
+                        for(var i = 0; i < m.scope.length; i++){
+                            if(m.scope[i].id == data.id){
+                                m.scope.splice(i, 1);
+                                break;
+                            }
+                        }
+                    },
+                    function(data){ console.log('failure') });
+            }
+        };
 
         $scope.update = function(model, id, fld, val){
             var newValue = {},
-                models = {
-                    'Term': {
-                        'service': Term,
-                        'scope': $scope.terms,
-                        'key': {termId: id}
-                    },
-                    'Sentiment': {
-                        'service': Sentiment,
-                        'scope': $scope.sentiments,
-                        'key': {sentimentId: id}
-                    }
-                };
+                m = getModel(model, id);
 
             newValue[fld] = val;
 
@@ -79,9 +102,7 @@ lastAdminControllers.controller('DashCtrl', ['$scope', 'Term', 'Sentiment', '$ht
                 }
             }
 
-            var m = models[model];
-
-            m.service.update(m.key, newValue,
+            m.service.update(m.pk, newValue,
                 function(data){
                     for(var i = 0; i < m.scope.length; i++){
                         if(m.scope[i].id == data.id){

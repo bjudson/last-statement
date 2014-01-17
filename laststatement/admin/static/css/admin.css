@@ -87,8 +87,12 @@
     outline: 0;
 }
 
-.title-fld {
+.term-table .title-fld {
     width: 25%;
+}
+
+.sentiment-table .title-fld {
+    width: 90%;
 }
 
 .words-fld {
@@ -161,4 +165,21 @@
     background: #444;
     color: #fff;
     border-radius: 2px;
+}
+
+.delete-btn button {
+    border: none;
+    width: 20px;
+    height: 20px;
+    background: #999;
+    border-radius: 2px;
+    color: #fff;
+    cursor: pointer;
+    outline: 0;
+    transition: background-color 0.5s ease;
+}
+
+.delete-btn button:hover {
+    border: none;
+    background: #900;
 }
