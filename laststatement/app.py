@@ -21,9 +21,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = settings.SQLURI
 
 from admin.views import admin
 from api.views import api
+from sentiments.views import sentiments
 
 app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(api, url_prefix='/api/1')
+app.register_blueprint(sentiments, url_prefix='/sentiments')
 
 import views
 
