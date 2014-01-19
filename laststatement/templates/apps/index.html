@@ -1,8 +1,8 @@
 <!doctype html>
-<html ng-app="sentimentApp">
+<html ng-app="{{ app_name }}">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-    <title>{% block title %}Last Statement Sentiments{% endblock %}</title>
+    <title>{{ page_title }}</title>
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -19,9 +19,9 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-sanitize.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-cookies.js"></script>
 
-    <script src="/static/sentiments/ng-app/app.js"></script>
-    <script src="/static/sentiments/ng-app/controllers.js"></script>
-    <script src="/static/sentiments/ng-app/services.js"></script>
+    {% for path in js %}
+    <script src="/static/{{ path }}"></script>
+    {% endfor %}
 </head>
 <body>
     <div id="page" class="wrap">

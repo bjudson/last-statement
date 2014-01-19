@@ -4,7 +4,7 @@
 
 var sentimentAppControllers = angular.module('sentimentAppControllers', []);
 
-sentimentAppControllers.controller('GridCtrl', ['$scope', 'Execution', 'Sentiment', '$http',
+var GridCtrl = sentimentAppControllers.controller('GridCtrl', ['$scope', 'Execution', 'Sentiment', '$http',
   function($scope, Execution, Sentiment, $http) {
     Execution.query({},
       function(data){
@@ -17,6 +17,7 @@ sentimentAppControllers.controller('GridCtrl', ['$scope', 'Execution', 'Sentimen
 
     Sentiment.query({},
       function(data){
+        $scope.statement_count = data.statement_count; // data.count
         $scope.sentiments = data.sentiments
       },
       function(data){

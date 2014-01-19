@@ -409,6 +409,9 @@ def sentiments_service(id=None):
     """
     if request.method == 'GET':
         if id == 'all':
+            statement_count = Offender.query.\
+                filter(Offender.last_statement != None).count()
+
             sentiments = Sentiment.query.order_by('title').all()
             stmt_list = [
                 {'id': s.id,
@@ -416,7 +419,8 @@ def sentiments_service(id=None):
                  'execution_count': len(s.offenders)
                  } for s in sentiments]
 
-            return jsonify(sentiments=stmt_list)
+            return jsonify(sentiments=stmt_list,
+                           statement_count=statement_count)
         elif id.isdigit():
             sentiment = Sentiment.query.filter(Sentiment.id == int(id)).first()
             stmt_obj = {

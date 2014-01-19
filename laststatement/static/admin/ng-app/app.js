@@ -15,11 +15,11 @@ lastAdmin.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
       when('/dashboard', {
-        templateUrl: 'static/ng-app/templates/dashboard.html',
+        templateUrl: '../static/admin/ng-app/templates/dashboard.html',
         controller: 'DashCtrl'
       }).
       when('/executions', {
-        templateUrl: 'static/ng-app/templates/executions.html',
+        templateUrl: '../static/admin/ng-app/templates/executions.html',
         controller: 'ExecutionCtrl'
       }).
       otherwise({

@@ -1,0 +1,27 @@
+.wrap {
+    max-width: 52em;
+}
+
+.sentiment-grid-pie {
+    width: 200px;
+    height: 200px;
+    float: left;
+    margin: 0 30px 30px 0;
+    background-color: #fffff5;
+    box-shadow: 1px 1px 2px #dedecc;
+    border: 1px solid #ddd;
+}
+
+.main-nav {
+    margin-top: 15px;
+}
+
+.btn {
+    padding: 3px 5px;
+    margin-right: 5px;
+    border: 1px solid #999;
+    border-radius: 3px;
+    box-shadow: 1px 1px 2px #ccc;
+    color: green;
+    text-decoration: none;
+}

@@ -5,8 +5,9 @@
 var sentimentApp = angular.module('sentimentApp', [
   'ngRoute',
   'ngSanitize',
-  'sentimentAppControllers',
-  'sentimentAppServices'
+  'sentimentAppServices',
+  'sentimentAppDirectives',
+  'sentimentAppControllers'
 ]);
 
 sentimentApp.config(['$routeProvider',

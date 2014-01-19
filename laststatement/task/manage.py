@@ -14,7 +14,7 @@ from flask.ext.script import Manager
 from sqlalchemy.orm import exc
 
 from laststatement.wsgi import application as app
-from laststatement.models import db, Offender
+from laststatement.models import db, Offender, Term
 
 DEATH_ROW_URLS = {
     'base': 'http://www.tdcj.state.tx.us/death_row/',
@@ -29,6 +29,25 @@ os.environ['TZ'] = 'America/Chicago'
 time.tzset()
 
 manager = Manager(app)
+
+
+@manager.command
+def term_map():
+    """ Search statements for terms and save relationships
+        Finds term(s), performs full-text search of all statements, saves
+        in join table.
+    """
+
+    terms = db.session.query(Term).all()
+    term_joins = []
+
+    for t in terms:
+        offenders = db.session.query(Offender).\
+            filter('to_tsvector(offenders.last_statement) '
+                   '@@ to_tsquery(\'%s\')' % ' | '.join(t.words)).all()
+
+        for o in offenders:
+            term_joins.append({'term_id': t.id, 'offender_id': o.id})
 
 
 @manager.command

@@ -3,5 +3,10 @@
 <h1>Sentiments</h1>
 
 <section id="grid">
-
+    <div ng-repeat="s in sentiments"
+         ls-pie-chart="s.title"
+         ls-pie-values="s.execution_count"
+         ls-pie-total="statement_count"
+         class="sentiment-grid-pie">
+     </div>
 </section>

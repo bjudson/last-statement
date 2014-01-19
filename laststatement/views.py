@@ -135,6 +135,32 @@ def all_text():
     return render_template('text.html', body=text)
 
 
+###############################################################################
+#
+#   Angular app routes
+#
+###############################################################################
+
+
+@app.route('/sentiments/', methods=['GET', 'OPTIONS'])
+def sentiments():
+    js = [
+        'sentiments/ng-app/app.js',
+        'sentiments/ng-app/services.js',
+        'sentiments/ng-app/controllers.js',
+        'sentiments/ng-app/directives.js'
+    ]
+
+    css = [
+        'last.css?v=7',
+        'sentiments/css/sentiments.css?v=1'
+    ]
+
+    return render_template('apps/index.html', app_name='sentimentApp',
+                           page_title='Last Statement Sentiments',
+                           js=js, css=css)
+
+
 @app.route('/terms', methods=['GET', 'OPTIONS'])
 def terms_index():
     """ The main terms page. Content is loaded by JS through API """
