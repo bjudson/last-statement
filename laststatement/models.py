@@ -116,9 +116,11 @@ class Sentiment(db.Model):
     __tablename__ = 'sentiments'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50))
+    active = db.Column(db.Boolean)
     offenders = db.relationship("Offender",
                                 secondary=Offender_Sentiment,
                                 backref='sentiments')
 
-    def __init__(self, title=None):
+    def __init__(self, title=None, active=False):
         self.title = title
+        self.active = active

@@ -44,6 +44,7 @@
             <th></th>
             <th>Count</th>
             <th>Title</th>
+            <th>Active</th>
         </tr>
         <tr ng-repeat="s in sentiments" ng-class-even="'even'">
             <td ng-click="delete('Sentiment', s.id)"
@@ -53,6 +54,10 @@
                 ls-fld="title"
                 ls-enter="update('Sentiment', sentiments[$index].id, 'title', sentiments[$index].title)"
                 class="title-fld"></td>
+            <td class="active-toggle"
+                ng-click="update('Sentiment', s.id, 'active', s.active)">
+                    <a href="javascript:void(0)">{{ s.active | checkmark }}</a>
+            </td>
         </tr>
     </table>
 

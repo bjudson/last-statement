@@ -10,7 +10,10 @@
         </tr>
         <tr ng-repeat="e in executions" ng-class-even="'even'">
             <td class="data-cell"><p>#{{ e.execution_num }}</p>
-                <p>{{ e.first_name }} {{ e.last_name }}</p>
+                <p>
+                    <a ng-if="e.execution_num > 182" href="http://www.txexecutions.org/reports/{{ e.execution_num }}.asp" target="_blank">{{ e.first_name }} {{ e.last_name }}</a>
+                    <span ng-if="e.execution_num <= 182">{{ e.first_name }} {{ e.last_name }}</span>
+                </p>
                 <p>{{ e.execution_date }}</p>
                 <p>{{ e.age }} yrs old</p>
                 <p>{{ e.race }}</p>

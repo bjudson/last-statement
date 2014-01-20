@@ -94,7 +94,7 @@ lastAdminControllers.controller('DashCtrl', ['$scope', 'Term', 'Sentiment', '$ht
 
             newValue[fld] = val;
 
-            if(fld === 'chart'){
+            if(fld === 'chart' || fld === 'active'){
                 if(val == true){
                     newValue[fld] = 'false';
                 }else{

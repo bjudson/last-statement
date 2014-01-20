@@ -19,9 +19,16 @@ var GridCtrl = sentimentAppControllers.controller('GridCtrl', ['$scope', 'Execut
       function(data){
         $scope.statement_count = data.statement_count;
         $scope.sentiments = data.sentiments;
+        $scope.sentiments = [];
         $scope.selected = [];
         $scope.executionPool = [];
         $scope.executionPoolCount = 0;
+
+        for(var i = 0; i < data.sentiments.length; i++){
+          if(data.sentiments[i].active === true){
+            $scope.sentiments.push(data.sentiments[i]);
+          }
+        }
       },
       function(data){
         console.log('Unable to query executions');

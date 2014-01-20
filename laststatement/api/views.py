@@ -416,7 +416,8 @@ def sentiments_service_public(id=None):
                 {'id': s.id,
                  'title': s.title,
                  'execution_count': len(s.offenders),
-                 'executions': [o.execution_num for o in s.offenders]
+                 'executions': [o.execution_num for o in s.offenders],
+                 'active': s.active
                  } for s in sentiments]
 
             return jsonify(sentiments=stmt_list,
@@ -477,6 +478,14 @@ def sentiments_service(id=None):
 
         try:
             sentiment.title = data['title']
+        except KeyError:
+            pass
+
+        try:
+            if data['active'] == 'true':
+                sentiment.active = True
+            elif data['active'] == 'false':
+                sentiment.active = False
         except KeyError:
             pass
 
