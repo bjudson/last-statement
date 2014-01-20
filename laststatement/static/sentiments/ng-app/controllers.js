@@ -20,7 +20,8 @@ var GridCtrl = sentimentAppControllers.controller('GridCtrl', ['$scope', 'Execut
         $scope.statement_count = data.statement_count;
         $scope.sentiments = data.sentiments;
         $scope.sentiments = [];
-        $scope.selected = [];
+        $scope.selectedSentiments = [];
+        $scope.sentimentTitles = [];
         $scope.executionPool = [];
         $scope.executionPoolCount = 0;
 
@@ -37,29 +38,31 @@ var GridCtrl = sentimentAppControllers.controller('GridCtrl', ['$scope', 'Execut
     $scope.select = function(id){
       // Add sentiment id to list of sentiments
       // Update list of executions appearing in all selected sentiments
-      var index = $scope.selected.indexOf(id),
+      var index = $scope.selectedSentiments.indexOf(id),
           execs = [],
           counts = [],
           execution_arr = [];
 
       $scope.executionPool = [];
+      $scope.sentimentTitles = [];
 
       if(index == -1){
-        $scope.selected.push(id);
+        $scope.selectedSentiments.push(id);
       }else{
-        $scope.selected.splice(index, 1);
+        $scope.selectedSentiments.splice(index, 1);
       }
 
       for(var i = 0; i < $scope.sentiments.length; i++){
-        if($scope.selected.indexOf($scope.sentiments[i].id) > -1){
+        if($scope.selectedSentiments.indexOf($scope.sentiments[i].id) > -1){
           execs = execs.concat($scope.sentiments[i].executions);
+          $scope.sentimentTitles.push($scope.sentiments[i].title)
         }
       }
 
       for(var i = 0; i < execs.length; i++) {
         var num = execs[i];
         counts[num] = counts[num] ? counts[num]+1 : 1;
-        if(counts[num] == $scope.selected.length){
+        if(counts[num] == $scope.selectedSentiments.length){
           execution_arr.push(num);
         }
       }

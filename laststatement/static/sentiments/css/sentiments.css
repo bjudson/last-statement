@@ -22,7 +22,7 @@ section {
 
 .sentiment-grid-selected {
     background-color: #fffffa;
-    border-color: #999;
+    border-color: orange;
 }
 
 .main-nav {

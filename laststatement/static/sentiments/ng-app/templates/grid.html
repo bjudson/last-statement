@@ -12,13 +12,14 @@
          ls-pie-select="select(s.title)"
          class="sentiment-grid-pie"
          data-id="{{s.id}}"
-         ng-class="{'sentiment-grid-selected': selected.indexOf(s.id) > -1}"
+         ng-class="{'sentiment-grid-selected': selectedSentiments.indexOf(s.id) > -1}"
          ng-click="select(s.id)">
      </div>
 </section>
 
 <section id="statements" ng-if="executionPoolCount > 0">
     <h1>Statements</h1>
+    <p>{{ sentimentTitles.join(', ') }}</p>
     <div ng-repeat="e in executionPool">
         <h2 class="statement-header">{{ e.first_name }} {{ e.last_name }} <span class="execution-date">{{ e.execution_date }}</span></h2>
         <div class="statement-text" ng-bind-html="e.statement"></div>
