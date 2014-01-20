@@ -399,14 +399,12 @@ def terms_data_single(term):
         return jsonify(success='false')
 
 
-@api.route('/sentiments/<id>', methods=['GET', 'PUT', 'DELETE', 'OPTIONS'])
-@api.route('/sentiments', methods=['POST', 'OPTIONS'])
-@login_required
-def sentiments_service(id=None):
-    """ Used for editable table in admin.
+@api.route('/sentiments/<id>', methods=['GET', 'OPTIONS'])
+def sentiments_service_public(id=None):
+    """ Public sentiments endpoint.
         GET: return record(s) for existing sentiments
-        PUT: update fields on existing sentiments
     """
+
     if request.method == 'GET':
         if id == 'all':
             statement_count = Offender.query.\
@@ -416,7 +414,8 @@ def sentiments_service(id=None):
             stmt_list = [
                 {'id': s.id,
                  'title': s.title,
-                 'execution_count': len(s.offenders)
+                 'execution_count': len(s.offenders),
+                 'executions': [o.execution_num for o in s.offenders]
                  } for s in sentiments]
 
             return jsonify(sentiments=stmt_list,
@@ -432,7 +431,16 @@ def sentiments_service(id=None):
         else:
             return jsonify(success='false')
 
-    elif request.method == 'DELETE':
+
+@api.route('/sentiments/<id>', methods=['PUT', 'DELETE', 'OPTIONS'])
+@api.route('/sentiments', methods=['POST', 'OPTIONS'])
+@login_required
+def sentiments_service(id=None):
+    """ Used for editable table in admin.
+        Implements DELETE, POST, and PUT methods
+    """
+
+    if request.method == 'DELETE':
         if id.isdigit():
             try:
                 sntmt = db.session.query(Sentiment).get(int(id))

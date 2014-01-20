@@ -2,11 +2,17 @@
 
 <h1>Sentiments</h1>
 
+{{ executionPool }}
+
 <section id="grid">
     <div ng-repeat="s in sentiments"
          ls-pie-chart="s.title"
          ls-pie-values="s.execution_count"
          ls-pie-total="statement_count"
-         class="sentiment-grid-pie">
+         ls-pie-select="select(s.title)"
+         class="sentiment-grid-pie"
+         data-id="{{s.id}}"
+         ng-class="{'sentiment-grid-selected': selected.indexOf(s.id) > -1}"
+         ng-click="select(s.id)">
      </div>
 </section>

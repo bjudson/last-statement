@@ -58,7 +58,7 @@ sentimentAppDirectives.directive('lsPieChart', ['$compile', 'd3', function($comp
                 .attr('text-anchor', 'middle')
                 .attr('font-size', '16pt')
                 .attr('fill', '#ccc')
-                .text(function(d){ return String(Math.round(percent * 100)) + '%'; });
+                .text(function(d){ return d.values; });
 
         }
     }

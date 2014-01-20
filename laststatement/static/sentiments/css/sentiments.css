@@ -12,6 +12,15 @@
     border: 1px solid #ddd;
 }
 
+.sentiment-grid-pie:hover {
+    box-shadow: 2px 2px 3px #dedecc;
+}
+
+.sentiment-grid-selected {
+    background-color: #fffffa;
+    border-color: #999;
+}
+
 .main-nav {
     margin-top: 15px;
 }

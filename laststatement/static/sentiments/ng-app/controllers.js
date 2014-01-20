@@ -17,10 +17,43 @@ var GridCtrl = sentimentAppControllers.controller('GridCtrl', ['$scope', 'Execut
 
     Sentiment.query({},
       function(data){
-        $scope.statement_count = data.statement_count; // data.count
-        $scope.sentiments = data.sentiments
+        $scope.statement_count = data.statement_count;
+        $scope.sentiments = data.sentiments;
+        $scope.selected = [];
+        $scope.executionPool = [];
       },
       function(data){
         console.log('Unable to query executions');
       });
+
+    $scope.select = function(id){
+      // Add sentiment id to list of sentiments
+      // Update list of executions appearing in all selected sentiments
+      var index = $scope.selected.indexOf(id),
+          execs = [],
+          counts = [],
+          execution_arr = [];
+
+      if(index == -1){
+        $scope.selected.push(id);
+      }else{
+        $scope.selected.splice(index, 1);
+      }
+
+      for(var i = 0; i < $scope.sentiments.length; i++){
+        if($scope.selected.indexOf($scope.sentiments[i].id) > -1){
+          execs = execs.concat($scope.sentiments[i].executions);
+        }
+      }
+
+      for(var i = 0; i< execs.length; i++) {
+        var num = execs[i];
+        counts[num] = counts[num] ? counts[num]+1 : 1;
+        if(counts[num] == $scope.selected.length){
+          execution_arr.push(num);
+        }
+      }
+
+      $scope.executionPool = execution_arr;
+    }
   }]);
