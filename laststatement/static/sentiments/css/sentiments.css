@@ -1,3 +1,7 @@
+section {
+    clear: both;
+}
+
 .wrap {
     max-width: 52em;
 }
@@ -33,4 +37,21 @@
     box-shadow: 1px 1px 2px #ccc;
     color: green;
     text-decoration: none;
+}
+
+.statement-header {
+    font-size: 1.2em;
+    margin-top: 40px;
+}
+
+.statement-header .execution-date {
+    color: #999;
+}
+
+.statement-links {
+    font-size: .9em;
+}
+
+.statement-links span {
+    padding-right: 15px;
 }

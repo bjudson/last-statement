@@ -21,6 +21,7 @@ var GridCtrl = sentimentAppControllers.controller('GridCtrl', ['$scope', 'Execut
         $scope.sentiments = data.sentiments;
         $scope.selected = [];
         $scope.executionPool = [];
+        $scope.executionPoolCount = 0;
       },
       function(data){
         console.log('Unable to query executions');
@@ -34,6 +35,8 @@ var GridCtrl = sentimentAppControllers.controller('GridCtrl', ['$scope', 'Execut
           counts = [],
           execution_arr = [];
 
+      $scope.executionPool = [];
+
       if(index == -1){
         $scope.selected.push(id);
       }else{
@@ -46,7 +49,7 @@ var GridCtrl = sentimentAppControllers.controller('GridCtrl', ['$scope', 'Execut
         }
       }
 
-      for(var i = 0; i< execs.length; i++) {
+      for(var i = 0; i < execs.length; i++) {
         var num = execs[i];
         counts[num] = counts[num] ? counts[num]+1 : 1;
         if(counts[num] == $scope.selected.length){
@@ -54,6 +57,12 @@ var GridCtrl = sentimentAppControllers.controller('GridCtrl', ['$scope', 'Execut
         }
       }
 
-      $scope.executionPool = execution_arr;
+      for(var i = 0; i < $scope.executions.length; i++){
+        if(execution_arr.indexOf($scope.executions[i].id) > -1){
+          $scope.executionPool.push($scope.executions[i]);
+        }
+      }
+
+      $scope.executionPoolCount = execution_arr.length;
     }
   }]);

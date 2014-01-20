@@ -193,6 +193,7 @@ def executions_service(id=None):
                    'execution_num': o.execution_num,
                    'statement': o.last_statement,
                    'teaser': o.teaser,
+                   'info_url': o.info_url,
                    'sentiments': [s.id for s in o.sentiments]}
                   for o in q]
 
