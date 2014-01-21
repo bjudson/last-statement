@@ -4,6 +4,33 @@ section {
 
 .wrap {
     max-width: 52em;
+    margin-top: 4em;
+}
+
+.navbar {
+    background: #fefee3;
+}
+
+.navbar-default .navbar-brand {
+    font-family: helvetica, arial, sans-serif;
+    font-size: 1.1em;
+    line-height: 25px;
+    padding-left: 0;
+    font-weight: bold;
+    color: #222;
+}
+
+.navbar-default .navbar-brand:hover {
+    color: #222;
+}
+
+.navbar .container {
+    max-width: 52em;
+}
+
+.selection-summary {
+    padding-top: 15px;
+    width: calc(100% - 280px);
 }
 
 .sentiment-grid-pie {

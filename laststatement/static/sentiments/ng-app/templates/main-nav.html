@@ -1,3 +1,14 @@
-<nav class="main-nav">
-    <a href="/" class="btn">Last Statement</a>
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <span class="navbar-brand"><a href="/">Last Statement</a> /Sentiments</span>
+        </div>
+
+        <div class="selection">
+            <p class="navbar-text selection-intro" ng-if="selectedSentiments.length < 1">Please select sentiments</p>
+            <div class="navbar-right selection-summary" ng-if="selectedSentiments.length > 0">
+                <div ls-bar-counter ls-bar-value="executionPoolCount" ls-bar-total="statement_count"></div>
+            </div>
+        </div>
+    </div>
 </nav>

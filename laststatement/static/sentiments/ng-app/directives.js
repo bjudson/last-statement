@@ -59,7 +59,53 @@ sentimentAppDirectives.directive('lsPieChart', ['$compile', 'd3', function($comp
                 .attr('font-size', '16pt')
                 .attr('fill', '#ccc')
                 .text(function(d){ return d.values; });
+        }
+    }
+}]);
 
+sentimentAppDirectives.directive('lsBarCounter', ['$compile', 'd3', function($compile, d3){
+    return {
+        scope: {
+            value: '=lsBarValue',
+            total: '=lsBarTotal',
+            select: '&lsBarSelect'
+        },
+        link: function($scope, elem, attr, ctrl) {
+            var percent = $scope.value / $scope.total,
+                height = 23,
+                width = $(elem[0]).width(),
+                svg = d3.select(elem[0])
+                    .append('svg')
+                    .style('width', '100%')
+                    .style('height', height)
+                    .append("g");
+
+            $scope.$watch('value', function (newVal, oldVal) {
+                if(svg.selectAll('.bar')){
+                    svg.selectAll('rect').data([]).exit().remove();
+                    svg.selectAll('text').data([]).exit().remove();
+                }
+
+                svg.selectAll('.bar')
+                    .data([$scope])
+                    .enter()
+                    .append('rect')
+                    .attr('y', 0)
+                    .attr('x', 0)
+                    .attr('fill', '#666')
+                    .attr('height', height)
+                    .attr('width', function(d){ return 1 + (d.value / d.total * width); });
+
+                svg.selectAll('.count')
+                    .data([$scope])
+                    .enter()
+                    .append('text')
+                    .attr('y', 17)
+                    .attr('x', function(d){ return (d.value / d.total * width) + 5; })
+                    .attr('fill', '#666')
+                    .attr('font-size', '12pt')
+                    .text(function(d){ return d.value; });
+            });
         }
     }
 }]);
