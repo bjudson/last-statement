@@ -78,18 +78,24 @@ sentimentAppDirectives.directive('lsBarCounter', ['$compile', 'd3', function($co
                     .append('svg')
                     .style('width', '100%')
                     .style('height', height)
-                    .append("g");
+                    .append('g');
+
+                svg.append('rect')
+                    .attr('height', height)
+                    .attr('width', width)
+                    .attr('fill', '#efefde');
 
             $scope.$watch('value', function (newVal, oldVal) {
                 if(svg.selectAll('.bar')){
-                    svg.selectAll('rect').data([]).exit().remove();
-                    svg.selectAll('text').data([]).exit().remove();
+                    svg.selectAll('rect.bar').data([]).exit().remove();
+                    svg.selectAll('.count').data([]).exit().remove();
                 }
 
                 svg.selectAll('.bar')
                     .data([$scope])
                     .enter()
                     .append('rect')
+                    .classed('bar', true)
                     .attr('y', 0)
                     .attr('x', 0)
                     .attr('fill', '#666')
@@ -100,6 +106,7 @@ sentimentAppDirectives.directive('lsBarCounter', ['$compile', 'd3', function($co
                     .data([$scope])
                     .enter()
                     .append('text')
+                    .classed('count', true)
                     .attr('y', 17)
                     .attr('x', function(d){ return (d.value / d.total * width) + 5; })
                     .attr('fill', '#666')

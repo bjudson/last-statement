@@ -7,8 +7,7 @@
          ls-pie-total="statement_count"
          ls-pie-select="select(s.title)"
          class="sentiment-grid-pie"
-         data-id="{{s.id}}"
-         ng-class="{'sentiment-grid-selected': selectedSentiments.indexOf(s.id) > -1}"
+         ng-class="{'sentiment-grid-selected': selectedSentiments.indexOf(s.id) > -1, 'row-last': ($index + 1) % 4 == 0}"
          ng-click="select(s.id)">
      </div>
 </section>
