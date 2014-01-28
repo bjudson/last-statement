@@ -64,6 +64,7 @@ def tweet():
     twitter = tweepy.API(auth)
 
     day_of_year = doy_leap(datetime.now())
+    date = datetime.now().strftime('%Y-%m-%d %H:%M')
 
     offender = db.session.query(Offender.execution_num,
                                 Offender.teaser).\
@@ -76,10 +77,11 @@ def tweet():
                 offender.execution_num
             twitter.update_status("%s %s" % (offender.teaser, url))
         except tweepy.TweepError as e:
-            print "Error: %s (%s)" % (e.message[0]['message'],
-                                      e.message[0]['code'])
+            print "%s Error: %s (%s)" % (date,
+                                         e.message[0]['message'],
+                                         e.message[0]['code'])
     else:
-        print 'No statement for today'
+        print '%s Notice: No statement for today'
 
 
 @manager.command
