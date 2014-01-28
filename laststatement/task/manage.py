@@ -71,8 +71,13 @@ def tweet():
         filter(Offender.execution_day == day_of_year).first()
 
     if offender is not None:
-        url = "http://laststatement.org/execution/%s" % offender.execution_num
-        twitter.update_status("%s %s" % (offender.teaser, url))
+        try:
+            url = "http://laststatement.org/execution/%s" % \
+                offender.execution_num
+            twitter.update_status("%s %s" % (offender.teaser, url))
+        except tweepy.TweepError as e:
+            print "Error: %s (%s)" % (e.message[0]['message'],
+                                      e.message[0]['code'])
     else:
         print 'No statement for today'
 
