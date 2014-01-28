@@ -18,10 +18,14 @@ settings = __import__('laststatement.settings.%s' % SETTINGS,
 app.debug = settings.DEBUG
 app.config['SECRET_KEY'] = settings.SECRET
 app.config['SQLALCHEMY_DATABASE_URI'] = settings.SQLURI
-TWITTER_CONSUMER_KEY = settings.TWITTER_CONSUMER_KEY
-TWITTER_CONSUMER_SECRET = settings.TWITTER_CONSUMER_SECRET
-TWITTER_ACCESS_TOKEN = settings.TWITTER_ACCESS_TOKEN
-TWITTER_ACCESS_TOKEN_SECRET = settings.TWITTER_ACCESS_TOKEN_SECRET
+
+try:
+    TWITTER_CONSUMER_KEY = settings.TWITTER_CONSUMER_KEY
+    TWITTER_CONSUMER_SECRET = settings.TWITTER_CONSUMER_SECRET
+    TWITTER_ACCESS_TOKEN = settings.TWITTER_ACCESS_TOKEN
+    TWITTER_ACCESS_TOKEN_SECRET = settings.TWITTER_ACCESS_TOKEN_SECRET
+except KeyError:
+    pass
 
 from admin.views import admin
 from api.views import api
