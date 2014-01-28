@@ -19,8 +19,8 @@
         <h2 class="statement-header">{{ e.first_name }} {{ e.last_name }} <span class="execution-date">{{ e.execution_date }}</span></h2>
         <div class="statement-text" ng-bind-html="e.statement"></div>
         <div class="statement-links">
-            <span><a href="http://www.tdcj.state.tx.us/death_row/{{ e.info_url }}" target="_blank">Offender information</a></span>
-            <span ng-if="e.execution_num > 182"><a href="http://www.txexecutions.org/reports/{{ e.execution_num }}.asp" target="_blank">Execution report</a></span>
+            <span><a href="http://www.tdcj.state.tx.us/death_row/{{ e.info_url }}" target="_blank">→ Offender information</a></span>
+            <span ng-if="e.execution_num > 182"><a href="http://www.txexecutions.org/reports/{{ e.execution_num }}.asp" target="_blank">→ Execution report</a></span>
         </div>
     </div>
 </section>

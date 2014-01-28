@@ -9,12 +9,17 @@ from datetime import datetime
 from collections import OrderedDict
 
 from bs4 import BeautifulSoup
+import tweepy
 
 from flask.ext.script import Manager
 from sqlalchemy.orm import exc
 
 from laststatement.wsgi import application as app
 from laststatement.models import db, Offender, Term
+from laststatement.app import TWITTER_CONSUMER_KEY,\
+    TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_TOKEN,\
+    TWITTER_ACCESS_TOKEN_SECRET
+from laststatement.helpers import doy_leap
 
 DEATH_ROW_URLS = {
     'base': 'http://www.tdcj.state.tx.us/death_row/',
@@ -48,6 +53,28 @@ def term_map():
 
         for o in offenders:
             term_joins.append({'term_id': t.id, 'offender_id': o.id})
+
+
+@manager.command
+def tweet():
+    """ Look for statements made on this day, tweet teaser + link """
+
+    auth = tweepy.OAuthHandler(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET)
+    auth.set_access_token(TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET)
+    twitter = tweepy.API(auth)
+
+    day_of_year = doy_leap(datetime.now())
+
+    offender = db.session.query(Offender.execution_num,
+                                Offender.teaser).\
+        filter(Offender.teaser != None).\
+        filter(Offender.execution_day == day_of_year).first()
+
+    if offender is not None:
+        url = "http://laststatement.org/execution/%s" % offender.execution_num
+        twitter.update_status("%s %s" % (offender.teaser, url))
+    else:
+        print 'No statement for today'
 
 
 @manager.command
