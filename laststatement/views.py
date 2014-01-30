@@ -85,6 +85,8 @@ def execution_num(num):
     if num.isdigit():
         offender = db.session.query(Offender.first_name, Offender.last_name,
                                     Offender.execution_date,
+                                    Offender.info_url,
+                                    Offender.execution_num,
                                     Offender.last_statement).\
             filter(Offender.execution_num == num).\
             first()

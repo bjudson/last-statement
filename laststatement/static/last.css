@@ -200,3 +200,11 @@ ul.terms {
     height: 1em;
     margin: 0 5px;
 }
+
+.statement-links {
+    font-size: .9em;
+}
+
+.statement-links span {
+    padding-right: 15px;
+}
