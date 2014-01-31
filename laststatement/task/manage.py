@@ -12,6 +12,7 @@ from bs4 import BeautifulSoup
 import tweepy
 
 from flask.ext.script import Manager
+from sqlalchemy import not_
 from sqlalchemy.orm import exc
 
 from laststatement.wsgi import application as app
@@ -69,11 +70,17 @@ def tweet():
     auth.set_access_token(TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET)
     twitter = tweepy.API(auth)
 
+    # returns 20 most recent statuses
+    recents = twitter.user_timeline()
+    posted = [r.text.split(' http')[0] for r in recents]
+    similar = "%|".join(posted) + "%"  # postgres SIMILAR TO syntax
+
     day_of_year = doy_leap(datetime.now())
     date = datetime.now().strftime('%Y-%m-%d %H:%M')
 
     offender = db.session.query(Offender.execution_num,
-                                Offender.teaser).\
+                                Offender.teaser,
+                                not_(Offender.teaser.op("SIMILAR TO")(similar))).\
         filter(Offender.teaser != None).\
         filter(Offender.execution_day == day_of_year).first()
 
