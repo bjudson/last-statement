@@ -75,30 +75,34 @@ def tweet():
         ~/webapps/laststatement_org/instance/cronlog.txt 2>&1
     """
 
+    day = datetime.now().strftime('%-m-%-d')
+
     auth = tweepy.OAuthHandler(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET)
     auth.set_access_token(TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET)
     twitter = tweepy.API(auth)
 
-    # returns 20 most recent statuses
+    qry = db.session.query(Offender.execution_num,
+                           Offender.teaser).\
+        filter(Offender.teaser != None).\
+        filter(func.date_part('month', Offender.execution_date) + '-' +
+               func.date_part('day', Offender.execution_date) == day)
+
+    # tweepy.user_timeline() returns 20 most recent statuses
     recent_teasers = [r.text.split(' http')[0]
                       for r in twitter.user_timeline()]
-    similar = "%|".join(recent_teasers) + "%"  # postgres SIMILAR TO syntax
 
-    day = datetime.now().strftime('%-m-%-d')
-    date = datetime.now().strftime('%Y-%m-%d %H:%M')
+    if len(recent_teasers) > 0:
+        similar = "%|".join(recent_teasers) + "%"  # postgres SIMILAR TO syntax
+        qry = qry.filter(not_(Offender.teaser.op("SIMILAR TO")(similar)))
 
-    offender = db.session.query(Offender.execution_num,
-                                Offender.teaser).\
-        filter(Offender.teaser != None).\
-        filter(not_(Offender.teaser.op("SIMILAR TO")(similar))).\
-        filter(func.date_part('month', Offender.execution_date) + '-' +
-               func.date_part('day', Offender.execution_date) == day).first()
+    offender = qry.first()
 
     if offender is not None:
         try:
             url = "http://laststatement.org/execution/%s" % \
                 offender.execution_num
-            twitter.update_status("%s %s" % (offender.teaser, url))
+            # twitter.update_status("%s %s" % (offender.teaser, url))
+            print offender.teaser
         except tweepy.TweepError as e:
             print "%s Error: %s (%s)" % (date,
                                          e.message[0]['message'],
