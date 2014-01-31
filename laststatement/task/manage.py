@@ -101,8 +101,7 @@ def tweet():
         try:
             url = "http://laststatement.org/execution/%s" % \
                 offender.execution_num
-            # twitter.update_status("%s %s" % (offender.teaser, url))
-            print offender.teaser
+            twitter.update_status("%s %s" % (offender.teaser, url))
         except tweepy.TweepError as e:
             print "%s Error: %s (%s)" % (date,
                                          e.message[0]['message'],
