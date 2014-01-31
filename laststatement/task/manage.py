@@ -79,9 +79,9 @@ def tweet():
     date = datetime.now().strftime('%Y-%m-%d %H:%M')
 
     offender = db.session.query(Offender.execution_num,
-                                Offender.teaser,
-                                not_(Offender.teaser.op("SIMILAR TO")(similar))).\
+                                Offender.teaser).\
         filter(Offender.teaser != None).\
+        filter(not_(Offender.teaser.op("SIMILAR TO")(similar))).\
         filter(Offender.execution_day == day_of_year).first()
 
     if offender is not None:
