@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 import tweepy
 
 from flask.ext.script import Manager
-from sqlalchemy import not_
+from sqlalchemy import not_, func
 from sqlalchemy.orm import exc
 
 from laststatement.wsgi import application as app
@@ -20,7 +20,6 @@ from laststatement.models import db, Offender, Term
 from laststatement.app import TWITTER_CONSUMER_KEY,\
     TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_TOKEN,\
     TWITTER_ACCESS_TOKEN_SECRET
-from laststatement.helpers import doy_leap
 
 DEATH_ROW_URLS = {
     'base': 'http://www.tdcj.state.tx.us/death_row/',
@@ -62,8 +61,18 @@ def term_map():
 def tweet():
     """ Look for statements made on this day, tweet teaser + link
 
-        In practice, this is called using a cron job once a day. Cron needs
-        to activate virtual environment before using this command.
+        In practice, this is called using a cron job. Cron needs to activate
+        virtual environment before using this command. This will first find
+        recent tweets and exclude them from the query. This way, cron can
+        call the script multiple times in a day and it will not attempt to post
+        duplicates.
+
+        Sample cron:
+        0 9,12,15,18 * * *
+        cd ~/webapps/laststatement_org &&
+        source ~/.virtualenvs/last/bin/activate &&
+        python -m laststatement.task.manage tweet >>
+        ~/webapps/laststatement_org/instance/cronlog.txt 2>&1
     """
 
     auth = tweepy.OAuthHandler(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET)
@@ -71,18 +80,19 @@ def tweet():
     twitter = tweepy.API(auth)
 
     # returns 20 most recent statuses
-    recents = twitter.user_timeline()
-    posted = [r.text.split(' http')[0] for r in recents]
-    similar = "%|".join(posted) + "%"  # postgres SIMILAR TO syntax
+    recent_teasers = [r.text.split(' http')[0]
+                      for r in twitter.user_timeline()]
+    similar = "%|".join(recent_teasers) + "%"  # postgres SIMILAR TO syntax
 
-    day_of_year = doy_leap(datetime.now())
+    day = datetime.now().strftime('%-m-%-d')
     date = datetime.now().strftime('%Y-%m-%d %H:%M')
 
     offender = db.session.query(Offender.execution_num,
                                 Offender.teaser).\
         filter(Offender.teaser != None).\
         filter(not_(Offender.teaser.op("SIMILAR TO")(similar))).\
-        filter(Offender.execution_day == day_of_year).first()
+        filter(func.date_part('month', Offender.execution_date) + '-' +
+               func.date_part('day', Offender.execution_date) == day).first()
 
     if offender is not None:
         try:
