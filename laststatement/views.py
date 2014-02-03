@@ -62,6 +62,7 @@ def index():
     day_of_year = doy_leap(datetime.now())
 
     offender = db.session.query(Offender.first_name, Offender.last_name,
+                                Offender.gender,
                                 Offender.execution_date,
                                 Offender.execution_num,
                                 Offender.last_statement).\
@@ -84,6 +85,7 @@ def execution_num(num):
 
     if num.isdigit():
         offender = db.session.query(Offender.first_name, Offender.last_name,
+                                    Offender.gender,
                                     Offender.execution_date,
                                     Offender.info_url,
                                     Offender.execution_num,

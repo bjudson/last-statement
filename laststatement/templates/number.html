@@ -16,7 +16,7 @@
 
     <h1 class="main-h1 home-h1">The last statement of {{ offender.first_name }} {{ offender.last_name }}</h1>
     <p class="intro">
-        On {{ exec_date }}, {{ offender.first_name }} {{ offender.last_name }} gave a last statement before his execution by the State of Texas.
+        On {{ exec_date }}, {{ offender.first_name }} {{ offender.last_name }} gave a last statement before {% if offender.gender == 'm' %}his{% else %}her{% endif %} execution by the State of Texas.
     </p>
 
     <div class="statement">
