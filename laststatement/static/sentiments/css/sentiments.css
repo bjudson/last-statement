@@ -43,6 +43,10 @@ section {
     height: 23px;
 }
 
+.selection-summary .bar {
+    fill: #666;
+}
+
 .btn {
     background: #fffff5;
 }

@@ -33,8 +33,8 @@ sentimentAppDirectives.directive('lsPieChart', ['$compile', 'd3', function($comp
 
             var foreground = svg.append("path")
                 .datum({endAngle: percent * τ})
-                .attr('class', 'percent-path')
-                .attr("d", arc);
+                .attr("d", arc)
+                .classed('percent-path', true);
 
             svg.selectAll('.sentiment-title')
                 .data([$scope])
@@ -91,7 +91,6 @@ sentimentAppDirectives.directive('lsBarCounter', ['$compile', 'd3', function($co
                     .classed('bar', true)
                     .attr('y', 0)
                     .attr('x', 0)
-                    .attr('fill', '#666')
                     .attr('height', height)
                     .attr('width', function(d){ return 1 + (d.value / d.total * width); });
 
