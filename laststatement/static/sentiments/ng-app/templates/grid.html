@@ -4,7 +4,7 @@
     <div ng-repeat="s in sentiments"
          ls-pie-chart="s.title"
          ls-pie-values="s.execution_count"
-         ls-pie-total="statement_count"
+         ls-pie-total="statementCount"
          ls-pie-select="select(s.title)"
          class="sentiment-grid-pie"
          ng-class="{'sentiment-grid-selected': selectedSentiments.indexOf(s.id) > -1, 'row-last': ($index + 1) % 4 == 0}"

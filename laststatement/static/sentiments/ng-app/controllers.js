@@ -17,8 +17,7 @@ var GridCtrl = sentimentAppControllers.controller('GridCtrl', ['$scope', 'Execut
 
     Sentiment.query({},
       function(data){
-        $scope.statement_count = data.statement_count;
-        $scope.sentiments = data.sentiments;
+        $scope.statementCount = data.statement_count;
         $scope.sentiments = [];
         $scope.selectedSentiments = [];
         $scope.sentimentTitles = [];

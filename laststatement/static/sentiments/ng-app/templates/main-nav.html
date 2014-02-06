@@ -7,7 +7,7 @@
         <div class="selection">
             <p class="navbar-text selection-intro" ng-if="selectedSentiments.length < 1">Please select sentiments</p>
             <div class="navbar-left selection-summary" ng-if="selectedSentiments.length > 0">
-                <div ls-bar-counter ls-bar-value="executionPoolCount" ls-bar-total="statement_count" class="bar-counter"></div>
+                <div ls-bar-counter ls-bar-value="executionPoolCount" ls-bar-total="statementCount" class="bar-counter"></div>
             </div>
             <div class="navbar-right" ng-if="selectedSentiments.length > 0">
                 <button type="button" class="btn btn-default navbar-btn" ng-class="{'hilite': showStatements}" ng-click="toggleStatements()">Statements</button>
