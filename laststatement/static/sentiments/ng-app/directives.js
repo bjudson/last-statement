@@ -17,8 +17,7 @@ sentimentAppDirectives.directive('lsPieChart', ['$compile', 'd3', function($comp
                 percent = $scope.values / $scope.total,
                 svg = d3.select(elem[0])
                     .append('svg')
-                    .style('width', 200)
-                    .style('height', 200)
+                    .attr('viewBox', "0 0 200 200")
                     .append("g")
                     .attr("transform", "translate(" + 100 + "," + 90 + ")");
 
