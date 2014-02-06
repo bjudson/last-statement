@@ -13,7 +13,7 @@ sentimentAppDirectives.directive('lsPieChart', ['$compile', 'd3', function($comp
             select: '&lsPieSelect'
         },
         link: function($scope, elem, attr, ctrl) {
-            var τ = 2 * Math.PI, // http://tauday.com/tau-manifesto
+            var tau = 2 * Math.PI, // http://tauday.com/tau-manifesto
                 percent = $scope.values / $scope.total,
                 svg = d3.select(elem[0])
                     .append('svg')
@@ -27,12 +27,12 @@ sentimentAppDirectives.directive('lsPieChart', ['$compile', 'd3', function($comp
                 .startAngle(0);
 
             var background = svg.append("path")
-                .datum({endAngle: τ})
+                .datum({endAngle: tau})
                 .style("fill", "#ddd")
                 .attr("d", arc);
 
             var foreground = svg.append("path")
-                .datum({endAngle: percent * τ})
+                .datum({endAngle: percent * tau})
                 .attr("d", arc)
                 .classed('percent-path', true);
 
@@ -92,7 +92,7 @@ sentimentAppDirectives.directive('lsBarCounter', ['$compile', 'd3', function($co
                     .attr('y', 0)
                     .attr('x', 0)
                     .attr('height', height)
-                    .attr('width', function(d){ return 1 + (d.value / d.total * width); });
+                    .attr('width', function(d){ return 1 + (parseInt(d.value) / parseInt(d.total) * width); });
 
                 svg.selectAll('.count')
                     .data([$scope])
@@ -100,7 +100,7 @@ sentimentAppDirectives.directive('lsBarCounter', ['$compile', 'd3', function($co
                     .append('text')
                     .classed('count', true)
                     .attr('y', 17)
-                    .attr('x', function(d){ return (d.value / d.total * width) + 5; })
+                    .attr('x', function(d){ return (parseInt(d.value) / parseInt(d.total) * width) + 5; })
                     .attr('fill', '#666')
                     .attr('font-size', '12pt')
                     .text(function(d){ return d.value; });
