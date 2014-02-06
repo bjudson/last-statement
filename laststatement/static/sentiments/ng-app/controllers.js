@@ -35,6 +35,16 @@ var GridCtrl = sentimentAppControllers.controller('GridCtrl', ['$scope', 'Execut
         console.log('Unable to query executions');
       });
 
+    $scope.showStatements = false;
+
+    $scope.toggleStatements = function(){
+      if($scope.showStatements){
+        $scope.showStatements = false;
+      }else{
+        $scope.showStatements = true;
+      }
+    }
+
     $scope.select = function(id){
       // Add sentiment id to list of sentiments
       // Update list of executions appearing in all selected sentiments
