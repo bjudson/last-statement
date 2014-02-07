@@ -27,8 +27,16 @@ def nav():
                 html += (u'<a id="cal-btn" class="icon-btn" href="/" title="'
                          u'Today’s last statement">☼</a> ')
             if b == 'data':
-                html += (u'<a id="data-btn" class="icon-btn" href="/terms" '
-                         u'title="Go to last statement data">%</a>')
+                html += (u'<a id="data-btn" class="icon-btn" href='
+                         u'"/sentiments" title="View sentiment data">'
+                         u'</a>')
+            if b == 'twitter':
+                html += (u'<a id="twitter-btn" class="icon-btn" href='
+                         u'"http://twitter.com/LastStatementTx" title='
+                         u'"Twitter bot"></a>')
+            if b == 'api':
+                html += (u'<a id="api-btn" class="icon-btn" href="/api"'
+                         u' title="Use API"></a>')
             if b == 'info':
                 html += (u'<a id="info-btn" class="icon-btn" href="javascript:'
                          u'void(0)" title="About this page">i</a> ')
