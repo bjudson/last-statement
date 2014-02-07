@@ -67,7 +67,7 @@ sentimentAppDirectives.directive('lsBarCounter', ['$compile', 'd3', function($co
         },
         link: function($scope, elem, attr, ctrl) {
             var percent = $scope.value / $scope.total,
-                height = 23,
+                height = 30,
                 width = $(elem[0]).width(),
                 svg = d3.select(elem[0])
                     .append('svg')
@@ -77,12 +77,6 @@ sentimentAppDirectives.directive('lsBarCounter', ['$compile', 'd3', function($co
                     .attr('height', height)
                     .attr('width', width)
                     .attr('fill', '#efefde');
-
-            $scope.$watch('value', function (newVal, oldVal) {
-                if(svg.selectAll('.bar')){
-                    svg.selectAll('rect.bar').data([]).exit().remove();
-                    svg.selectAll('.count').data([]).exit().remove();
-                }
 
                 svg.selectAll('.bar')
                     .data([$scope])
@@ -99,11 +93,47 @@ sentimentAppDirectives.directive('lsBarCounter', ['$compile', 'd3', function($co
                     .enter()
                     .append('text')
                     .classed('count', true)
-                    .attr('y', 17)
+                    .attr('y', 20)
                     .attr('x', function(d){ return (parseInt(d.value) / parseInt(d.total) * width) + 5; })
                     .attr('fill', '#666')
                     .attr('font-size', '12pt')
                     .text(function(d){ return d.value; });
+
+                svg.selectAll('.empty-text')
+                    .data([$scope])
+                    .enter()
+                    .append('text')
+                    .classed('empty-text', true)
+                    .attr('y', 20)
+                    .attr('x', 170)
+                    .attr('fill', '#aaa')
+                    .attr('font-size', '12pt')
+                    .text('Please select sentiments');
+
+            $scope.$watch('value', function (newVal, oldVal) {
+                var bar,
+                    count;
+
+                if(newVal > 0){
+                    svg.selectAll('.empty-text')
+                        .data([])
+                        .exit()
+                        .remove();
+                }
+
+                svg.selectAll('.bar')
+                    .data([$scope])
+                    .transition()
+                    .duration(500)
+                    .attr('width', function(d){ return 1 + (parseInt(d.value) / parseInt(d.total) * width); });
+
+                svg.selectAll('.count')
+                    .data([$scope])
+                    .transition()
+                    .duration(500)
+                    .attr('x', function(d){ return (parseInt(d.value) / parseInt(d.total) * width) + 5; })
+                    .text(function(d){ return d.value; });
+
             });
         }
     }
