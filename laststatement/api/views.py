@@ -131,6 +131,7 @@ def executions_service(id=None):
         age_gt = request.args.get('age_gt', None)
         age_lt = request.args.get('age_lt', None)
         has_statement = request.args.get('has_statement', 't')
+        order = request.args.get('order', None)
         # inc_statement = request.args.get('inc_statement', 't')
 
         q = db.session.query(Offender)
@@ -182,7 +183,13 @@ def executions_service(id=None):
             q = q.filter(Offender.execution_num == id)
 
         count = q.count()
-        q = q.order_by(Offender.execution_num).all()
+
+        if order == 'day_of_year':
+            q = q.order_by(Offender.execution_day).all()
+        else:
+            q = q.order_by(Offender.execution_num).all()
+
+        # q = q.order_by(Offender.execution_day).all()
 
         corpus = [{'id': o.execution_num,
                    'first_name': o.first_name,
@@ -190,6 +197,7 @@ def executions_service(id=None):
                    'race': o.race,
                    'age': o.age,
                    'execution_date': o.execution_date.strftime('%Y-%m-%d'),
+                   'execution_day': o.execution_day,
                    'execution_num': o.execution_num,
                    'statement': o.last_statement,
                    'teaser': o.teaser,

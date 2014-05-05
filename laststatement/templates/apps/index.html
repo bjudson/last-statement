@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="{{ app_name }}">
+<html{% if app_name %} ng-app="{{ app_name }}"{% endif %}>
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,19 +8,37 @@
     <meta name="MobileOptimized" content="320">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+    {% if 'bootstrap' in lib %}
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/static/last.css?v=7">
-    <link rel="stylesheet" type="text/css" href="/static/sentiments/css/sentiments.css?v=1">
-    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
+    {% endif %}
 
+    {% for path in css %}
+    <link rel="stylesheet" type="text/css" href="/static/{{ path }}">
+    {% endfor %}
+
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Alegreya+Sans:300' rel='stylesheet' type='text/css'>
+
+    {% if 'jquery' in lib %}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    {% endif %}
+
+    {% if 'angular' in lib %}
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-route.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-animate.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-resource.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-sanitize.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-cookies.js"></script>
+    {% endif %}
+
+    {% if 'bootstrap' in lib %}
     <script src="/static/lib/ui-bootstrap-0.10.0.js"></script>
+    {% endif %}
+
+    {% if 'd3' in lib %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.6/d3.min.js"></script>
+    {% endif %}
 
     {% for path in js %}
     <script src="/static/{{ path }}"></script>

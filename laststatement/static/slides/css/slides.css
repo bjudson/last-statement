@@ -1,0 +1,21 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 24px;
+    font-family: 'Alegreya Sans', sans-serif;
+}
+
+body {
+    background: #222;
+}
+
+#page {
+    margin: 200px 200px 0 200px;
+}
+
+.excerpt {
+    margin-bottom: 100px;
+    color: #000;
+    font-size: 2.5em;
+}

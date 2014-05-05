@@ -156,6 +156,12 @@ def all_text():
 
 @app.route('/sentiments/', methods=['GET', 'OPTIONS'])
 def sentiments():
+    lib = [
+        'jquery',
+        'angular',
+        'bootstrap'
+    ]
+
     js = [
         'sentiments/ng-app/app.js',
         'sentiments/ng-app/services.js',
@@ -170,7 +176,27 @@ def sentiments():
 
     return render_template('apps/index.html', app_name='sentimentApp',
                            page_title='Last Statement Sentiments',
-                           js=js, css=css)
+                           lib=lib, js=js, css=css)
+
+
+@app.route('/slides/', methods=['GET', 'OPTIONS'])
+def slides():
+    lib = [
+        'jquery',
+        'd3'
+    ]
+
+    js = [
+        'slides/app/app.js'
+    ]
+
+    css = [
+        'slides/css/slides.css?v=1'
+    ]
+
+    return render_template('apps/index.html',
+                           page_title='Last Statement Slides',
+                           lib=lib, js=js, css=css)
 
 
 @app.route('/terms', methods=['GET', 'OPTIONS'])
