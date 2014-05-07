@@ -1,6 +1,6 @@
 $(document).ready(function(){
   var colorScale = d3.scale.linear()
-    .domain([1,365])
+    .domain([1,182,365])
     .interpolate(d3.interpolateRgb)
     .range(["#222222", "#ffffff", "#222222"])
 
