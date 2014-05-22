@@ -1,18 +1,4 @@
 $(document).ready(function(){
-    $('#info-btn').on('click', function(event){
-        var btn = $('#info-btn');
-
-        if(btn.hasClass('icon-btn-selected')){
-            btn.removeClass('icon-btn-selected');
-        }else{
-            btn.addClass('icon-btn-selected');
-        }
-
-        $('#more-info').slideToggle('fast');
-
-        return false;
-    });
-
     if($('.term-chart')){
         var termView = location.hash.replace('#',''),
             url = "/api/1/terms/data/" + termView,

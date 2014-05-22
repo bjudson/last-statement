@@ -46,6 +46,19 @@ def nav():
                          u'code">#</a> ')
         html += u'</nav>'
 
+        if 'info' in buttons:
+            html += (u"<script>$('#info-btn').on('click', function(event){"
+                     u"var btn = $('#info-btn');"
+                     u"if(btn.hasClass('icon-btn-selected')){"
+                     u"btn.removeClass('icon-btn-selected');"
+                     u"}else{"
+                     u"btn.addClass('icon-btn-selected');"
+                     u"}"
+                     u"$('#more-info').slideToggle('fast');"
+                     u"$('html, body').animate({ scrollTop: $(document).height() }, 'fast');"
+                     u"return false;"
+                     u"});</script>")
+
         return Markup(html)
     return dict(top_nav=top_nav)
 
@@ -63,8 +76,8 @@ def exec_total():
 ###############################################################################
 
 
-@app.route("/", methods=['GET', 'OPTIONS'])
-def index():
+@app.route("/today", methods=['GET', 'OPTIONS'])
+def today():
     """ Show statement for someone executed on this date, or nearest date """
 
     day_of_year = doy_leap(datetime.now())
@@ -154,7 +167,7 @@ def all_text():
 ###############################################################################
 
 
-@app.route('/sentiments/', methods=['GET', 'OPTIONS'])
+@app.route('/', methods=['GET', 'OPTIONS'])
 def sentiments():
     lib = [
         'jquery',
@@ -176,6 +189,7 @@ def sentiments():
 
     return render_template('apps/index.html', app_name='sentimentApp',
                            page_title='Last Statement Sentiments',
+                           show_footer='true',
                            lib=lib, js=js, css=css)
 
 

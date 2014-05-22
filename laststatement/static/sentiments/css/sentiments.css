@@ -29,6 +29,11 @@ section {
     max-width: 50em;
 }
 
+.menu a:hover {
+    text-decoration: none;
+    background: #ccc;
+}
+
 .selection-intro.navbar-text {
     color: #ceceb5;
 }
@@ -62,7 +67,7 @@ section {
 }
 
 .btn.hilite {
-    color: orange;
+    color: #428bca;
 }
 
 .bar-counter {
@@ -108,11 +113,11 @@ section {
 }
 
 .sentiment-grid-pie:hover .percent-path {
-    fill: #C77E25;
+    fill: #658AA9;
 }
 
 .sentiment-grid-selected:hover .percent-path {
-    fill: orange;
+    fill: #428bca;
 }
 
 .sentiment-grid-pie:hover  {
@@ -121,12 +126,12 @@ section {
 
 .sentiment-grid-selected {
     background-color: #fffffa;
-    border-color: orange;
+    border-color: #428bca;
 }
 
 .sentiment-grid-selected .count-text,
 .sentiment-grid-selected .percent-path {
-    fill: orange;
+    fill: #428bca;
 }
 
 .main-nav {
