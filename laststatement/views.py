@@ -23,12 +23,12 @@ def nav():
         """ Returns HTML nav element with selected buttons """
         html = u'<nav class="menu">'
         for b in buttons:
-            if b == 'home':
-                html += (u'<a id="cal-btn" class="icon-btn" href="/" title="'
+            if b == 'today':
+                html += (u'<a id="cal-btn" class="icon-btn" href="/today" title="'
                          u'Today’s last statement">☼</a> ')
             if b == 'data':
                 html += (u'<a id="data-btn" class="icon-btn" href='
-                         u'"/sentiments" title="View sentiment data">'
+                         u'"/" title="View sentiment data">'
                          u'</a>')
             if b == 'twitter':
                 html += (u'<a id="twitter-btn" class="icon-btn" href='
