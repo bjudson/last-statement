@@ -38,8 +38,10 @@ var GridCtrl = sentimentAppControllers.controller('GridCtrl', ['$scope', 'Execut
 
     $scope.toggleStatements = function(){
       if($scope.showStatements){
+        $('html, body').scrollTop(0);
         $scope.showStatements = false;
       }else{
+        $('html, body').scrollTop(0);
         $scope.showStatements = true;
       }
     }
