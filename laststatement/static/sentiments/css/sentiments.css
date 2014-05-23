@@ -152,6 +152,12 @@ section {
     }
 }
 
+@media all and (max-width: 340px) {
+    .app-name {
+        display: none;
+    }
+}
+
 .sentiment-grid-pie:hover .percent-path {
     fill: #658AA9;
 }
