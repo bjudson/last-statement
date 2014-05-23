@@ -16,7 +16,7 @@
 
     <h1 class="main-h1 home-h1">The last statement of {{ offender.first_name }} {{ offender.last_name }}</h1>
     <p class="intro">
-        On {{ exec_date }}, {{ offender.first_name }} {{ offender.last_name }} gave a last statement before {% if offender.gender == 'm' %}his{% else %}her{% endif %} execution by the State of Texas.
+        Given on {{ exec_date }}, before {% if offender.gender == 'm' %}his{% else %}her{% endif %} execution by the State of Texas.
     </p>
 
     <div class="statement">
@@ -26,7 +26,9 @@
 
         <div class="statement-links">
             <span><a href="http://www.tdcj.state.tx.us/death_row/{{ offender.info_url }}" target="_blank">Offender information</a></span>
+            {% if offender.execution_num > 181 %}
             <span><a href="http://www.txexecutions.org/reports/{{ offender.execution_num }}.asp" target="_blank">Execution report</a></span>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
