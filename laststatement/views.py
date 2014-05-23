@@ -21,6 +21,7 @@ def nav():
     """ Makes function for building nav element available in all templates """
     def top_nav(buttons=('home', 'info', 'github')):
         """ Returns HTML nav element with selected buttons """
+
         html = u'<nav class="menu">'
         for b in buttons:
             if b == 'today':
@@ -45,19 +46,6 @@ def nav():
                          u'github.com/bjudson/last-statement" title="Get the '
                          u'code">#</a> ')
         html += u'</nav>'
-
-        if 'info' in buttons:
-            html += (u"<script>$('#info-btn').on('click', function(event){"
-                     u"var btn = $('#info-btn');"
-                     u"if(btn.hasClass('icon-btn-selected')){"
-                     u"btn.removeClass('icon-btn-selected');"
-                     u"}else{"
-                     u"btn.addClass('icon-btn-selected');"
-                     u"}"
-                     u"$('#more-info').slideToggle('fast');"
-                     u"$('html, body').animate({ scrollTop: $(document).height() }, 'fast');"
-                     u"return false;"
-                     u"});</script>")
 
         return Markup(html)
     return dict(top_nav=top_nav)
