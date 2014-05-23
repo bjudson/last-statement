@@ -153,6 +153,9 @@ section {
 }
 
 @media all and (max-width: 340px) {
+    .navbar-brand {
+        font-size: 1em;
+    }
     .app-name {
         display: none;
     }
