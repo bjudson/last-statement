@@ -175,10 +175,12 @@ def sentiments():
         'sentiments/css/sentiments.css?v=1'
     ]
 
+    thumb = 'sentiments/img/sentiments-thumb.jpg'
+
     return render_template('apps/index.html', app_name='sentimentApp',
                            page_title='Last Statement Sentiments',
                            show_footer='true',
-                           lib=lib, js=js, css=css)
+                           lib=lib, js=js, css=css, thumb=thumb)
 
 
 @app.route('/slides/', methods=['GET', 'OPTIONS'])
