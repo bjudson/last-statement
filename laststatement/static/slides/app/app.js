@@ -33,19 +33,23 @@ $(document).ready(function(){
         data = data,
         date;
 
-    $('.excerpt').html(data.executions[0].teaser);
-    $('.date').html(textDate(data.executions[i].execution_date));
-    cont.fadeIn(500);
+    setTimeout(function(){
+      $('.excerpt').html(data.executions[0].teaser);
+      $('.date').html(textDate(data.executions[i].execution_date));
+      cont.fadeIn(500);
 
-    timer = setInterval(function(){
-      if(i < data.executions.length){
-        newSlide(cont, data.executions[i].teaser, textDate(data.executions[i].execution_date));
-        $('body').css({'background': colorScale(data.executions[i].execution_day)})
-        i++;
-      }else{
-        clearInterval(timer);
-      }
+      timer = setInterval(function(){
+        if(i < data.executions.length){
+          newSlide(cont, data.executions[i].teaser, textDate(data.executions[i].execution_date));
+          $('body').css({'background': colorScale(data.executions[i].execution_day)})
+          i++;
+        }else{
+          cont.fadeOut(500);
+          clearInterval(timer);
+        }
 
+      }, 10000);
     }, 10000);
+
   });
 });
