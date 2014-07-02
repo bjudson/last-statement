@@ -177,7 +177,7 @@ def executions_service(id=None):
                     err.append('until parameter malformed; ignoring')
 
             if has_statement == 't':
-                q = q.filter(Offender.last_statement != None)
+                q = q.filter(Offender.teaser != None)
 
         else:
             q = q.filter(Offender.execution_num == id)
