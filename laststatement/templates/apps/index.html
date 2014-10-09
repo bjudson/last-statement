@@ -8,6 +8,8 @@
     <meta name="MobileOptimized" content="320">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+    <link rel="alternate" type='application/atom+xml' href="http://laststatement.org/rss/statements" title="Recent Last Statements from Texas Death Row">
+
     {% if 'bootstrap' in lib %}
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
     {% endif %}
@@ -53,7 +55,7 @@
         <div ng-view class="view-frame"></div>
 
         {% if show_footer == 'true' %}
-            {{ top_nav(('twitter', 'github')) }}
+            {{ top_nav(('twitter', 'rss', 'github')) }}
 
             <div id="more-info" class="more-info">
                 <p>

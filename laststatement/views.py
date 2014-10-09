@@ -28,26 +28,29 @@ def nav():
         html = u'<nav class="menu">'
         for b in buttons:
             if b == 'today':
-                html += (u'<a id="cal-btn" class="icon-btn" href="/today" title="'
-                         u'Today’s last statement">☼</a> ')
+                html += (u'<a id="cal-btn" class="icon-btn" href="/today" '
+                         u'title="Today’s last statement"></a> ')
             if b == 'data':
                 html += (u'<a id="data-btn" class="icon-btn" href='
-                         u'"/" title="View sentiment data">'
+                         u'"/" title="View sentiment data">'
                          u'</a>')
             if b == 'twitter':
                 html += (u'<a id="twitter-btn" class="icon-btn" href='
                          u'"http://twitter.com/LastStatementTx" title='
-                         u'"Twitter bot"></a>')
+                         u'"Twitter bot"></a>')
+            if b == 'rss':
+                html += (u'<a id="rss-btn" class="icon-btn"'
+                         u' href="/rss/statements" title="RSS feed"></a>')
             if b == 'api':
                 html += (u'<a id="api-btn" class="icon-btn" href="/api"'
-                         u' title="Use API"></a>')
+                         u' title="Use API"></a>')
             if b == 'info':
                 html += (u'<a id="info-btn" class="icon-btn" href="javascript:'
-                         u'void(0)" title="About this page">i</a> ')
+                         u'void(0)" title="About this page"></a> ')
             if b == 'github':
                 html += (u'<a id="github-btn" class="icon-btn" href="https://'
                          u'github.com/bjudson/last-statement" title="Get the '
-                         u'code">#</a> ')
+                         u'code"></a> ')
         html += u'</nav>'
 
         return Markup(html)
@@ -91,7 +94,7 @@ def today():
 
     exec_date = date2text(offender.execution_date)
 
-    return render_template('home.html', offender=offender,
+    return render_template('today.html', offender=offender,
                            exec_date=exec_date)
 
 
@@ -159,7 +162,7 @@ def all_text():
 def rss():
     """ RSS feed of last statements """
 
-    feed = AtomFeed('Recent Articles',
+    feed = AtomFeed('Recent Last Statements from Texas Death Row',
                     feed_url=request.url, url=request.url_root)
 
     statements = db.session.query(Offender.first_name, Offender.last_name,
