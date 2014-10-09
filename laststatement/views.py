@@ -2,11 +2,14 @@
 
 import re
 from datetime import datetime
+from urlparse import urljoin
 
-from flask import (abort, render_template, Markup)
+from flask import (request, abort, render_template, Markup)
+from werkzeug.contrib.atom import AtomFeed
 
 from app import app
 from models import db, Offender
+from sqlalchemy import desc
 from helpers import date2text, doy_leap
 
 
@@ -55,6 +58,10 @@ def nav():
 def exec_total():
     """ Makes total number of executions available in all templates """
     return dict(exec_total=db.session.query(Offender).count())
+
+
+def make_external(url):
+    return urljoin(request.url_root, url)
 
 
 ###############################################################################
@@ -146,6 +153,31 @@ def all_text():
     text = re.sub('<[^<]+?>', '', ' '.join(corpus))
 
     return render_template('text.html', body=text)
+
+
+@app.route('/rss/statements', methods=['GET', 'OPTIONS'])
+def rss():
+    """ RSS feed of last statements """
+
+    feed = AtomFeed('Recent Articles',
+                    feed_url=request.url, url=request.url_root)
+
+    statements = db.session.query(Offender.first_name, Offender.last_name,
+                                  Offender.execution_date,
+                                  Offender.execution_num,
+                                  Offender.last_statement).\
+        filter(Offender.last_statement != None).\
+        order_by(desc(Offender.execution_num)).\
+        limit(20)
+
+    for s in statements:
+        feed.add('Texas execution #%d last statement' % s.execution_num,
+                 unicode(s.last_statement),
+                 content_type='html',
+                 author='%s %s' % (s.first_name, s.last_name),
+                 url=make_external('execution/%d' % s.execution_num),
+                 updated=s.execution_date)
+    return feed.get_response()
 
 
 ###############################################################################
