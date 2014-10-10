@@ -122,16 +122,17 @@ lastAdminControllers.controller('ExecutionCtrl', ['$scope', 'Execution', 'Sentim
                 $scope.executions = data.executions
             },
             function(data){
-                console.log('Unable to query executions');
+                throw new Error('Unable to query executions');
             });
         $scope.orderProp = 'execution_num';
+        $scope.orderDesc = true;
 
         Sentiment.query({},
             function(data){
                 $scope.sentiments = data.sentiments
             },
             function(data){
-                console.log('Unable to query executions');
+                throw new Error('Unable to query sentiments');
             });
 
         $scope.update = function(id, fld, val, add){
