@@ -117,7 +117,7 @@ lastAdminControllers.controller('DashCtrl', ['$scope', 'Term', 'Sentiment', '$ht
 
 lastAdminControllers.controller('ExecutionCtrl', ['$scope', 'Execution', 'Sentiment', '$http',
     function($scope, Execution, Sentiment, $http) {
-        Execution.query({},
+        Execution.query({has_statement: 'f'},
             function(data){
                 $scope.executions = data.executions
             },
