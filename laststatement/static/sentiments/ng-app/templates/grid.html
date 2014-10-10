@@ -3,6 +3,7 @@
 <section id="grid">
     <div ng-repeat="s in sentiments"
          ls-pie-chart="s.title"
+         ls-pie-overlap="s.overlap"
          ls-pie-values="s.execution_count"
          ls-pie-total="statementCount"
          ls-pie-select="select(s.title)"

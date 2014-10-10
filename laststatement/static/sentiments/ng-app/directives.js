@@ -10,11 +10,12 @@ sentimentAppDirectives.directive('lsPieChart', ['$compile', 'd3', function($comp
             title: '=lsPieChart',
             values: '=lsPieValues',
             total: '=lsPieTotal',
-            select: '&lsPieSelect'
+            select: '&lsPieSelect',
+            overlap: '=lsPieOverlap'
         },
         link: function($scope, elem, attr, ctrl) {
             var tau = 2 * Math.PI, // http://tauday.com/tau-manifesto
-                percent = $scope.values / $scope.total,
+                percent = $scope.overlap / $scope.total,
                 svg = d3.select(elem[0])
                     .append('svg')
                     .attr('viewBox', "0 0 200 200")
@@ -46,7 +47,7 @@ sentimentAppDirectives.directive('lsPieChart', ['$compile', 'd3', function($comp
                 .attr('text-anchor', 'middle')
                 .text(function(d){ return d.title; });
 
-            svg.selectAll('.count-text')
+            var num = svg.selectAll('.count-text')
                 .data([$scope])
                 .enter()
                 .append('text')
@@ -54,6 +55,37 @@ sentimentAppDirectives.directive('lsPieChart', ['$compile', 'd3', function($comp
                 .attr('y', 8)
                 .attr('text-anchor', 'middle')
                 .text(function(d){ return d.values; });
+
+            $scope.$watch('overlap', function (newVal, oldVal) {
+                var percent = newVal / $scope.total;
+
+                foreground.transition()
+                    .duration(500)
+                    .call(arcTween, percent * tau);
+
+                num.transition()
+                    .duration(500)
+                    .call(numTween, [oldVal, newVal]);
+            });
+
+            function arcTween(transition, newAngle) {
+                transition.attrTween("d", function(d) {
+                    var interpolate = d3.interpolate(d.endAngle, newAngle);
+                    return function(t) {
+                        d.endAngle = interpolate(t);
+                        return arc(d);
+                    };
+                });
+            }
+
+            function numTween(transition, vals) {
+                transition.tween("text", function(d) {
+                    var i = d3.interpolateRound(vals[0], vals[1]);
+                    return function(t) {
+                        this.textContent = i(t);
+                    };
+                });
+            }
         }
     }
 }]);
@@ -111,9 +143,6 @@ sentimentAppDirectives.directive('lsBarCounter', ['$compile', 'd3', function($co
                     .text('Please select sentiments');
 
             $scope.$watch('value', function (newVal, oldVal) {
-                var bar,
-                    count;
-
                 if(newVal > 0){
                     svg.selectAll('.empty-text')
                         .data([])
