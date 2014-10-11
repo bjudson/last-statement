@@ -7,6 +7,8 @@ import re
 import time
 from datetime import datetime
 from collections import OrderedDict
+import smtplib
+from email.mime.text import MIMEText
 
 from bs4 import BeautifulSoup
 import tweepy
@@ -19,7 +21,8 @@ from laststatement.wsgi import application as app
 from laststatement.models import db, Offender, Term
 from laststatement.app import TWITTER_CONSUMER_KEY,\
     TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_TOKEN,\
-    TWITTER_ACCESS_TOKEN_SECRET
+    TWITTER_ACCESS_TOKEN_SECRET, SMTP_FROM, SMTP_USER,\
+    SMTP_PASS, SMTP_HOST, NOTIFY_EMAIL
 
 DEATH_ROW_URLS = {
     'base': 'http://www.tdcj.state.tx.us/death_row/',
@@ -214,9 +217,25 @@ def scrape_info_jpg(url, execution_num):
     return False
 
 
+def send_notification(msg):
+    """ Send a notification if anything interesting happened """
+
+    msg = MIMEText(msg)
+    msg['Subject'] = 'Last Statement notice'
+    msg['From'] = SMTP_FROM
+    msg['To'] = NOTIFY_EMAIL
+
+    mailer = smtplib.SMTP_SSL(host=SMTP_HOST)
+    # mailer.set_debuglevel(1)
+    mailer.login(user=SMTP_USER, password=SMTP_PASS)
+    mailer.sendmail(SMTP_FROM, NOTIFY_EMAIL, msg.as_string())
+    mailer.quit()
+
+
 @manager.command
 def scrape():
-    """ Scrape data from TDCJ and save any new records found
+    """ Scrape data from TDCJ and save any new records found. Generally this
+        will be run by cron.
         TODO: Scrape extra offender data. Much of this is in jpg files, so we
               will not be able to get a complete data set.
     """
@@ -270,6 +289,10 @@ def scrape():
 
     print "%s Notice: Statements added: %d" % (date, statements_added)
     print "%s Notice: Statements failed: %d" % (date, statements_failed)
+
+    if statements_added > 0 or statements_failed > 0:
+        send_notification('Last Statement scrape: %d added, %d failed' %
+                          (statements_added, statements_failed))
 
     #
     # Save jpg files
