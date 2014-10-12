@@ -42,22 +42,26 @@ class LastStatementTestCase(TestCase):
 
     def test_index(self):
         resp = self.client.get('/')
-        assert 'The last statement of' in resp.data
+        self.assert200(resp)
 
     def test_execution_num(self):
         resp = self.client.get('/execution/1')
+        self.assert200(resp)
         assert 'The last statement of' in resp.data
 
     def test_all(self):
         resp = self.client.get('/all')
+        self.assert200(resp)
         assert '500. Kimberly McCarthy' in resp.data
 
     def test_all_text(self):
         resp = self.client.get('/all/text')
+        self.assert200(resp)
         assert 'Love one another' in resp.data
 
     def test_terms_index(self):
         resp = self.client.get('/terms')
+        self.assert200(resp)
         assert 'chart' in resp.data
 
 if __name__ == '__main__':
