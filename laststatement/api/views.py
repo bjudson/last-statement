@@ -89,7 +89,13 @@ def statement_time_calc(offenders, type):
 
 @api.route('/', methods=['GET', 'OPTIONS'])
 def index():
-    return jsonify(success='true')
+    public_endpoints = {
+        '/api/1/executions': 'Get all executions',
+        '/api/1/executions/<id>': 'Get execution data by ID',
+        '/api/1/sentiments/all': 'Get all sentiments',
+        '/api/1/sentiments/<id>': 'Get sentiment by ID',
+    }
+    return jsonify(public_endpoints=public_endpoints)
 
 
 @api.route('/user', methods=['GET', 'POST', 'OPTIONS'])
