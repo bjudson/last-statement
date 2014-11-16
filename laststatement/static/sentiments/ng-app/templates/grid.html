@@ -13,15 +13,4 @@
      </div>
 </section>
 
-<section id="statements" ng-class="{'visible': showStatements}" ng-if="executionPoolCount > 0">
-    <h1>Statements</h1>
-    <p>{{ sentimentTitles.join(', ') }}</p>
-    <div ng-repeat="e in executionPool">
-        <h2 class="statement-header">{{ e.first_name }} {{ e.last_name }} <span class="execution-date">{{ e.execution_date }}</span></h2>
-        <div class="statement-text" ng-bind-html="e.statement"></div>
-        <div class="statement-links">
-            <span><a href="http://www.tdcj.state.tx.us/death_row/{{ e.info_url }}" target="_blank">→ Offender information</a></span>
-            <span ng-if="e.execution_num > 182"><a href="http://www.txexecutions.org/reports/{{ e.execution_num }}.asp" target="_blank">→ Execution report</a></span>
-        </div>
-    </div>
-</section>
+<ng-include src="'../static/sentiments/ng-app/templates/statements.html'"></ng-include>

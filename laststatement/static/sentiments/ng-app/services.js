@@ -21,12 +21,11 @@ var sentimentAppServices = angular.module('sentimentAppServices', ['ngResource']
   .factory('d3Service', ['$document', '$q', '$rootScope',
     function($document, $q, $rootScope) {
       var d = $q.defer();
+      
       function onScriptLoad() {
         $rootScope.$apply(function() { d.resolve(window.d3); });
       }
-      // Create a script tag with d3 as the source
-      // and call our onScriptLoad callback when it
-      // has been loaded
+
       var scriptTag = $document[0].createElement('script');
       scriptTag.type = 'text/javascript'; 
       scriptTag.async = true;

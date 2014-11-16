@@ -4,7 +4,7 @@
 
 var sentimentAppDirectives = angular.module('sentimentAppDirectives', []);
 
-sentimentAppDirectives.directive('lsPieChart', ['$compile', 'd3Service', function($compile, d3Service){
+sentimentAppDirectives.directive('lsPieChart', ['d3Service', function(d3Service){
     return {
         scope: {
             title: '=lsPieChart',
@@ -93,7 +93,7 @@ sentimentAppDirectives.directive('lsPieChart', ['$compile', 'd3Service', functio
     }
 }]);
 
-sentimentAppDirectives.directive('lsBarCounter', ['$compile', 'd3Service', function($compile, d3Service){
+sentimentAppDirectives.directive('lsBarCounter', ['d3Service', function(d3Service){
     return {
         scope: {
             value: '=lsBarValue',
